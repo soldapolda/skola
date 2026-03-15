@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>CPU Simulátor PRO - ATmega2560 (Static)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100vw; height: 100vh; overflow: hidden; background-color: #0f172a; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; }
+        .slide-frame { width: 100vw; height: 100vh; box-shadow: 0 40px 120px rgba(0,0,0,0.8), 0 0 0 3px #334155; }
+        .bg-cpu      { background-color: #d1b3b3; border: 5px solid #8d6e63; }
+        .bg-control  { background-color: #c48e8e; border: 4px solid #333; }
+        .bg-dekod    { background-color: #c48e8e; border: 4px solid #333; }
+        .bg-ram      { background-color: #c48e8e; border: 5px solid #8d6e63; }
+        .bg-reg      { background-color: #4fb3bf; border: 3px solid #000; }
+        .bg-alu      { background-color: #d9e2d5; border: 6px solid #000; clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%); }
+        .bg-ram-table{ background-color: #7b1fa2; border: 4px solid #000; }
+    </style>
+</head>
+<body>
+
+    <div class="slide-frame bg-slate-100 overflow-hidden flex" style="padding: 1.2vw; gap: 1.2vw;">
+
+        <!-- ── CPU ─────────────────────────────────────────────────── -->
+        <div class="flex-[3] flex flex-col h-full">
+            <div class="bg-cpu rounded-[2vw] flex flex-col h-full shadow-2xl border-double" style="padding: 1.2vw; gap: 1vh;">
+
+                <!-- Registers -->
+                <div class="grid grid-cols-4" style="gap: 1.2vw;">
+                    <div class="text-center">
+                        <span class="block font-black" style="font-size:1.2vw; margin-bottom:0.3vh;">R0</span>
+                        <div class="bg-reg font-mono shadow-inner text-center" style="font-size:2.2vw; padding:0.6vh 0;">0x17</div>
+                    </div>
+                    <div class="text-center">
+                        <span class="block font-black" style="font-size:1.2vw; margin-bottom:0.3vh;">R1</span>
+                        <div class="bg-reg font-mono text-center" style="font-size:2.2vw; padding:0.6vh 0;">0x00</div>
+                    </div>
+                    <div class="text-center">
+                        <span class="block font-black" style="font-size:1.2vw; margin-bottom:0.3vh;">R2</span>
+                        <div class="bg-reg font-mono text-center" style="font-size:2.2vw; padding:0.6vh 0;">0x00</div>
+                    </div>
+                    <div class="text-center">
+                        <span class="block font-black" style="font-size:1.2vw; margin-bottom:0.3vh;">R3</span>
+                        <div class="bg-reg font-mono text-center" style="font-size:2.2vw; padding:0.6vh 0;">0x00</div>
+                    </div>
+                </div>
+
+                <!-- ALU -->
+                <div class="flex-1 flex justify-center items-center">
+                    <div class="bg-alu flex items-center justify-center shadow-2xl" style="width:28vw; height:22vh;">
+                        <span class="font-black tracking-tighter" style="font-size:7vw;">ALU</span>
+                    </div>
+                </div>
+
+                <!-- Bottom row: DEKODOVANI + Control unit -->
+                <div class="flex justify-between items-end" style="gap: 1vw;">
+
+                    <!-- DEKODOVANI -->
+                    <div class="bg-dekod shadow-2xl rounded-lg" style="width:21vw; padding:0.9vw;">
+                        <h3 class="text-center font-black uppercase border-b-4 border-black/10" style="font-size:1.5vw; margin-bottom:1vh; padding-bottom:0.5vh;">Dekodování</h3>
+                        <div class="font-mono font-black text-center text-white rounded" style="background:#1d4ed8; font-size:1.8vw; padding:0.8vh 0;">LD R0, 0x09</div>
+                    </div>
+
+                    <!-- Řídicí jednotka -->
+                    <div class="bg-control shadow-2xl rounded-lg" style="width:32vw; padding:0.9vw;">
+                        <h3 class="text-center font-black uppercase border-b-4 border-black/10" style="font-size:1.5vw; margin-bottom:1vh; padding-bottom:0.5vh;">Řídicí jednotka</h3>
+                        <div style="display:flex; flex-direction:column; gap:0.8vh;">
+                            <div class="flex items-center justify-between">
+                                <span class="font-black" style="font-size:1.1vw;">INSTRUKČNÍ REGISTR:</span>
+                                <div class="bg-reg font-mono text-center" style="font-size:1.6vw; padding:0.4vh 0.6vw; width:8vw;">0x2017</div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="font-black" style="font-size:1.1vw;">ČÍTAČ PROGRAMU (PC):</span>
+                                <div class="bg-reg font-mono text-center" style="font-size:1.6vw; padding:0.4vh 0.6vw; width:8vw;">0x0042</div>
+                            </div>
+                            <!-- Status register -->
+                            <div style="margin-top:0.4vh;">
+                                <div class="flex border-4 border-black bg-white">
+                                    <div class="flex-1 border-r-2 border-black text-center font-black bg-blue-100"  style="font-size:1.2vw; padding:0.3vh 0;">I</div>
+                                    <div class="flex-1 border-r-2 border-black text-center font-black" style="font-size:1.2vw; padding:0.3vh 0;">T</div>
+                                    <div class="flex-1 border-r-2 border-black text-center font-black" style="font-size:1.2vw; padding:0.3vh 0;">H</div>
+                                    <div class="flex-1 border-r-2 border-black text-center font-black" style="font-size:1.2vw; padding:0.3vh 0;">S</div>
+                                    <div class="flex-1 border-r-2 border-black text-center font-black" style="font-size:1.2vw; padding:0.3vh 0;">V</div>
+                                    <div class="flex-1 border-r-2 border-black text-center font-black bg-red-100"  style="font-size:1.2vw; padding:0.3vh 0;">N</div>
+                                    <div class="flex-1 border-r-2 border-black text-center font-black" style="font-size:1.2vw; padding:0.3vh 0;">Z</div>
+                                    <div class="flex-1 text-center font-black" style="font-size:1.2vw; padding:0.3vh 0;">C</div>
+                                </div>
+                                <div class="flex border-x-4 border-b-4 border-black bg-gray-200 font-mono text-center">
+                                    <div class="flex-1 border-r-2 border-black" style="font-size:1.3vw; padding:0.25vh 0;">0</div>
+                                    <div class="flex-1 border-r-2 border-black" style="font-size:1.3vw; padding:0.25vh 0;">0</div>
+                                    <div class="flex-1 border-r-2 border-black" style="font-size:1.3vw; padding:0.25vh 0;">0</div>
+                                    <div class="flex-1 border-r-2 border-black" style="font-size:1.3vw; padding:0.25vh 0;">0</div>
+                                    <div class="flex-1 border-r-2 border-black" style="font-size:1.3vw; padding:0.25vh 0;">0</div>
+                                    <div class="flex-1 border-r-2 border-black" style="font-size:1.3vw; padding:0.25vh 0;">1</div>
+                                    <div class="flex-1 border-r-2 border-black" style="font-size:1.3vw; padding:0.25vh 0;">0</div>
+                                    <div class="flex-1" style="font-size:1.3vw; padding:0.25vh 0;">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ── RAM ─────────────────────────────────────────────────── -->
+        <div class="flex-1 flex flex-col h-full">
+            <div class="bg-ram rounded-[1.5vw] flex flex-col h-full shadow-2xl" style="padding: 0.8vw;">
+                <div class="bg-ram-table rounded-[1vw] overflow-hidden flex flex-col h-full">
+                    <!-- RAM title row -->
+                    <div class="bg-black/60 text-white text-center font-black uppercase" style="font-size:1.6vw; padding:0.6vh 0;">RAM</div>
+                    <!-- Column headers -->
+                    <div class="grid grid-cols-2 border-b-4 border-black bg-black/50 text-white font-black uppercase text-center" style="font-size:1.4vw; padding:0.5vh 0;">
+                        <span>Adresa</span>
+                        <span>Data</span>
+                    </div>
+                    <!-- Rows -->
+                    <div class="flex-1 font-mono text-white" style="font-size:1.4vw;">
+                        <div class="grid grid-cols-2 border-b-2 border-black/20 text-center" style="padding:0.6vh 0;"><span>0x00</span><span>0x2017</span></div>
+                        <div class="grid grid-cols-2 border-b-2 border-black/20 text-center bg-yellow-500/40" style="padding:0.6vh 0;"><span>0x01</span><span>0x21FF</span></div>
+                        <div class="grid grid-cols-2 border-b-2 border-black/20 text-center" style="padding:0.6vh 0;"><span>0x02</span><span>0x9508</span></div>
+                        <div class="grid grid-cols-2 border-b-2 border-black/20 text-center" style="padding:0.6vh 0;"><span>0x03</span><span>0x0000</span></div>
+                        <div class="grid grid-cols-2 border-b-2 border-black/20 text-center" style="padding:0.6vh 0;"><span>0x04</span><span>0x0000</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
