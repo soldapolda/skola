@@ -58,7 +58,7 @@ export default function ControlUnit({ controlUnit, activeFields = [], animateIr,
           className="flex items-center justify-between"
           style={activeFields.includes('ir') ? ACTIVE_ROW : undefined}
         >
-          <span className="font-black" style={{ fontSize: '1.1vw' }}>RI:</span>
+          <span className="font-black" style={{ fontSize: '1.1vw' }}>Registr Instrukce (RI):</span>
           <div
             key={animateIr ? `ir-anim-${stepKey}` : 'ir'}
             className="font-mono text-center"

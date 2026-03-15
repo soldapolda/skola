@@ -2,26 +2,24 @@ import type { CpuState } from './types';
 
 export const initialState: CpuState = {
   registers: [
-    { name: 'R0', value: '0x17' },
-    { name: 'R1', value: '0x00' },
-    { name: 'R2', value: '0x00' },
-    { name: 'R3', value: '0x00' },
+    { name: 'R0', value: '—' },
+    { name: 'R1', value: '—' },
+    { name: 'R2', value: '—' },
+    { name: 'R3', value: '—' },
   ],
   controlUnit: {
-    ir: '0x2017',
-    pc: '0x01',
-    flags: { I: 0, T: 0, H: 0, S: 0, V: 0, N: 1, Z: 0, C: 0 },
+    ir: '—',
+    pc: '0x00',
+    flags: { I: 0, T: 0, H: 0, S: 0, V: 0, N: 0, Z: 0, C: 0 },
   },
   decoded: {
-    raw: 'LD R0, 0x09',
-    opcode: 'LD',
-    operands: 'R0, 0x09',
+    raw: '',
+    opcode: '',
+    operands: '',
   },
   ram: [
-    { address: '0x00', data: '0x2017' },
-    { address: '0x01', data: '0x21FF', highlighted: true },
-    { address: '0x02', data: '0x9508' },
-    { address: '0x03', data: '0x0000' },
-    { address: '0x04', data: '0x0000' },
+    { address: '0x00', data: '0xE09F' },   // LDI R0, 0x9F
+    { address: '0x01', data: '0xE1A0' },   // LDI R1, 0xA0
+    { address: '0x02', data: '0x0C01' },   // ADD R0, R1
   ],
 };

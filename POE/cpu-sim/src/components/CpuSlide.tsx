@@ -10,6 +10,8 @@ import Connections from './Connections';
 import FlyingValue from './FlyingValue';
 
 const BLANK_FLAGS = { I: 0, T: 0, H: 0, S: 0, V: 0, N: 0, Z: 0, C: 0 };
+// SREG after ADD 0x9F + 0xA0: carry=1, signed overflow=1, S=N^V=1
+const ADD_FLAGS   = { I: 0, T: 0, H: 0, S: 1, V: 1, N: 0, Z: 0, C: 1 };
 
 interface Props {
   state: CpuState;
@@ -36,28 +38,35 @@ export default function CpuSlide({ state, step = 0 }: Props) {
 
   const flightDone = arrivedSteps.has(step);
 
-  // Resolve 'ram-row-pc' sentinel to the actual PC-addressed row ID
+  // Resolve 'ram-row-pc' sentinel to the actual step-relative PC row ID
   const resolvedFlight = def.flight ? {
     ...def.flight,
     fromId: def.flight.fromId === 'ram-row-pc'
-      ? `ram-row-${state.controlUnit.pc}`
+      ? `ram-row-${def.displayPc}`
       : def.flight.fromId,
   } : undefined;
 
-  // Suppress destination value while flying
-  const displayIr       = (resolvedFlight?.toId === 'ri-row'        && !flightDone) ? '—' : def.displayIr;
-  const displayOpcode   = (resolvedFlight?.toId === 'dekodovani-box' && !flightDone) ? '' : def.displayOpcode;
-  const displayOperands = (resolvedFlight?.toId === 'dekodovani-box' && !flightDone) ? '' : def.displayOperands;
+  // Suppress destination value while packet is in-flight
+  const displayIr       = (resolvedFlight?.toId === 'ri-row'         && !flightDone) ? '—'  : def.displayIr;
+  const displayOpcode   = (resolvedFlight?.toId === 'dekodovani-box'  && !flightDone) ? ''   : def.displayOpcode;
+  const displayOperands = (resolvedFlight?.toId === 'dekodovani-box'  && !flightDone) ? ''   : def.displayOperands;
 
-  // Build the state that should be displayed at this step
+  // Registers whose write animation fires this step
+  const animateRegNames = [
+    ...(def.animateR0 ? ['R0'] : []),
+    ...(def.animateR1 ? ['R1'] : []),
+  ];
+
   const displayState: CpuState = {
-    registers: state.registers.map(r =>
-      r.name === 'R0' ? { ...r, value: def.displayR0 } : r
-    ),
+    registers: state.registers.map(r => {
+      if (r.name === 'R0') return { ...r, value: def.displayR0 };
+      if (r.name === 'R1') return { ...r, value: def.displayR1 };
+      return r;
+    }),
     controlUnit: {
       ir:    displayIr,
       pc:    def.displayPc,
-      flags: def.displayFlags ? state.controlUnit.flags : BLANK_FLAGS,
+      flags: def.displayFlags ? ADD_FLAGS : BLANK_FLAGS,
     },
     decoded: {
       raw:      displayOpcode ? `${displayOpcode} ${displayOperands}` : '',
@@ -67,7 +76,8 @@ export default function CpuSlide({ state, step = 0 }: Props) {
     ram: state.ram,
   };
 
-  const activeRamAddresses = def.activeRamRow ? [state.controlUnit.pc] : [];
+  // Use step-relative PC to highlight the correct RAM row and draw the connection
+  const activeRamAddresses = def.activeRamRow ? [def.displayPc] : [];
 
   return (
     <div
@@ -101,7 +111,7 @@ export default function CpuSlide({ state, step = 0 }: Props) {
           <Registers
             registers={displayState.registers}
             activeNames={def.activeRegisters}
-            animateNames={def.animateR0 ? ['R0'] : []}
+            animateNames={animateRegNames}
             stepKey={step}
           />
           <Alu active={def.activeAlu} />
@@ -110,13 +120,13 @@ export default function CpuSlide({ state, step = 0 }: Props) {
             <Dekodovani
               decoded={displayState.decoded}
               active={def.activeDek}
-              animateDekod={def.animateDekod}
+              animateDekod={def.animateDekod && (resolvedFlight?.toId !== 'dekodovani-box' || flightDone)}
               stepKey={step}
             />
             <ControlUnit
               controlUnit={displayState.controlUnit}
               activeFields={def.activeFields}
-              animateIr={def.animateIr}
+              animateIr={def.animateIr && (resolvedFlight?.toId !== 'ri-row' || flightDone)}
               animatePc={def.animatePc}
               stepKey={step}
             />
@@ -130,7 +140,7 @@ export default function CpuSlide({ state, step = 0 }: Props) {
       {/* ── SVG connections ── */}
       <Connections
         containerRef={containerRef}
-        pcAddress={state.controlUnit.pc}
+        pcAddress={def.displayPc}
         activeTypes={def.activeConnections}
       />
 

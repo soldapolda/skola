@@ -59,7 +59,7 @@ export default function Connections({ containerRef, pcAddress, activeTypes }: Pr
   const sreg     = r['sreg-box'];
   const pcRow    = r[`ram-row-${pcAddress}`];
 
-  if (!alu || !dek || !cu || !cpuOuter || !ri || !pc || !sreg || !pcRow) return null;
+  if (!alu || !dek || !cu || !cpuOuter || !ri || !pc || !sreg) return null;
 
   const aluTop = alu.top;
   const aluBot = alu.top + alu.height;
@@ -112,8 +112,8 @@ export default function Connections({ containerRef, pcAddress, activeTypes }: Pr
     lines.push({ d: hv(cu.left, py, alcx, aluBot), color: C.pc, type: 'pc-alu' });
   }
 
-  // 6. PC → RAM row (green)
-  {
+  // 6. PC → RAM row (green) — only when the PC-addressed row exists in RAM
+  if (pcRow) {
     const py   = midY(pc);
     const rry  = midY(pcRow);
     const cpuR = cpuOuter.left + cpuOuter.width;
