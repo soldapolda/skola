@@ -11,6 +11,7 @@ export default function ControlUnit({ controlUnit }: Props) {
 
   return (
     <div
+      id="cu-box"
       className="shadow-2xl rounded-lg"
       style={{
         width: '32vw',
@@ -27,10 +28,10 @@ export default function ControlUnit({ controlUnit }: Props) {
       </h3>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8vh' }}>
-        {/* IR */}
-        <div className="flex items-center justify-between">
+        {/* RI – Instrukční registr */}
+        <div id="ri-row" className="flex items-center justify-between">
           <span className="font-black" style={{ fontSize: '1.1vw' }}>
-            INSTRUKČNÍ REGISTR:
+            RI:
           </span>
           <div
             className="font-mono text-center"
@@ -47,7 +48,7 @@ export default function ControlUnit({ controlUnit }: Props) {
         </div>
 
         {/* PC */}
-        <div className="flex items-center justify-between">
+        <div id="pc-row" className="flex items-center justify-between">
           <span className="font-black" style={{ fontSize: '1.1vw' }}>
             ČÍTAČ PROGRAMU (PC):
           </span>
@@ -65,8 +66,8 @@ export default function ControlUnit({ controlUnit }: Props) {
           </div>
         </div>
 
-        {/* Status register */}
-        <div style={{ marginTop: '0.4vh' }}>
+        {/* Status register / SREG */}
+        <div id="sreg-box" style={{ marginTop: '0.4vh' }}>
           <div className="flex border-4 border-black bg-white">
             {FLAG_KEYS.map((key, i) => (
               <div

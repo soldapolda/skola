@@ -15,7 +15,9 @@ export interface ControlUnit {
 }
 
 export interface DecodedInstruction {
-  raw: string; // e.g. "LD R0, 0x09"
+  raw: string;      // e.g. "LD R0, 0x09"
+  opcode: string;   // e.g. "LD"
+  operands: string; // e.g. "R0, 0x09"
 }
 
 export interface RamRow {

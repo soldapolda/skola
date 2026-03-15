@@ -16,6 +16,7 @@ export default function Registers({ registers }: Props) {
             {reg.name}
           </span>
           <div
+            id={`reg-${reg.name}`}
             className="font-mono text-center shadow-inner"
             style={{
               fontSize: '2.2vw',

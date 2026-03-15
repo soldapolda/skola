@@ -6,7 +6,7 @@ interface Props {
 
 export default function Ram({ rows }: Props) {
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div id="ram-panel" className="flex-1 flex flex-col h-full">
       <div
         className="rounded-[1.5vw] flex flex-col h-full shadow-2xl"
         style={{ backgroundColor: '#c48e8e', border: '5px solid #8d6e63', padding: '0.8vw' }}
@@ -37,6 +37,7 @@ export default function Ram({ rows }: Props) {
             {rows.map((row) => (
               <div
                 key={row.address}
+                id={`ram-row-${row.address}`}
                 className={`grid grid-cols-2 border-b-2 border-black/20 text-center ${row.highlighted ? 'bg-yellow-500/40' : ''}`}
                 style={{ padding: '0.6vh 0' }}
               >

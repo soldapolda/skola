@@ -2,6 +2,7 @@ export default function Alu() {
   return (
     <div className="flex-1 flex justify-center items-center">
       <div
+        id="alu-shape"
         className="flex items-center justify-center shadow-2xl"
         style={{
           width: '28vw',
