@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import type { CpuState } from '../types';
+import { CPU_STEPS, MAX_CPU_STEP } from '../cpuSteps';
 import Registers from './Registers';
 import Alu from './Alu';
 import Dekodovani from './Dekodovani';
@@ -7,12 +8,36 @@ import ControlUnit from './ControlUnit';
 import Ram from './Ram';
 import Connections from './Connections';
 
+const BLANK_FLAGS = { I: 0, T: 0, H: 0, S: 0, V: 0, N: 0, Z: 0, C: 0 };
+
 interface Props {
   state: CpuState;
+  step?: number;
 }
 
-export default function CpuSlide({ state }: Props) {
+export default function CpuSlide({ state, step = 0 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const def = CPU_STEPS[Math.min(step, MAX_CPU_STEP)];
+
+  // Build the state that should be displayed at this step
+  const displayState: CpuState = {
+    registers: state.registers.map(r =>
+      r.name === 'R0' ? { ...r, value: def.displayR0 } : r
+    ),
+    controlUnit: {
+      ir:    def.displayIr,
+      pc:    def.displayPc,
+      flags: def.displayFlags ? state.controlUnit.flags : BLANK_FLAGS,
+    },
+    decoded: {
+      raw:      def.displayOpcode ? `${def.displayOpcode} ${def.displayOperands}` : '',
+      opcode:   def.displayOpcode,
+      operands: def.displayOperands,
+    },
+    ram: state.ram,
+  };
+
+  const activeRamAddresses = def.activeRamRow ? [state.controlUnit.pc] : [];
 
   return (
     <div
@@ -27,6 +52,7 @@ export default function CpuSlide({ state }: Props) {
         backgroundColor: '#f1f5f9',
         boxShadow: '0 40px 120px rgba(0,0,0,0.8), 0 0 0 3px #334155',
         overflow: 'hidden',
+        fontFamily: "'Segoe UI', sans-serif",
       }}
     >
       {/* ── CPU ── */}
@@ -42,22 +68,84 @@ export default function CpuSlide({ state }: Props) {
             gap: '1vh',
           }}
         >
-          <Registers registers={state.registers} />
-          <Alu />
+          <Registers
+            registers={displayState.registers}
+            activeNames={def.activeRegisters}
+            animateNames={def.animateR0 ? ['R0'] : []}
+            stepKey={step}
+          />
+          <Alu active={def.activeAlu} />
 
-          {/* Bottom row — items-start so Dekodovani sits higher */}
           <div className="flex items-start justify-between" style={{ gap: '1vw' }}>
-            <Dekodovani decoded={state.decoded} />
-            <ControlUnit controlUnit={state.controlUnit} />
+            <Dekodovani
+              decoded={displayState.decoded}
+              active={def.activeDek}
+              animateDekod={def.animateDekod}
+              stepKey={step}
+            />
+            <ControlUnit
+              controlUnit={displayState.controlUnit}
+              activeFields={def.activeFields}
+              animateIr={def.animateIr}
+              animatePc={def.animatePc}
+              stepKey={step}
+            />
           </div>
         </div>
       </div>
 
       {/* ── RAM ── */}
-      <Ram rows={state.ram} />
+      <Ram rows={displayState.ram} activeAddresses={activeRamAddresses} />
 
-      {/* ── SVG connections (absolute overlay) ── */}
-      <Connections containerRef={containerRef} pcAddress={state.controlUnit.pc} />
+      {/* ── SVG connections ── */}
+      <Connections
+        containerRef={containerRef}
+        pcAddress={state.controlUnit.pc}
+        activeTypes={def.activeConnections}
+      />
+
+      {/* ── Step label ── */}
+      {def.label && (
+        <div style={{
+          position: 'absolute',
+          bottom: '2.5vh',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: 'rgba(15,23,42,0.88)',
+          color: '#fef3c7',
+          padding: '0.7vh 2.2vw',
+          borderRadius: '0.8vw',
+          fontSize: '1.4vw',
+          fontWeight: 700,
+          whiteSpace: 'nowrap',
+          border: '2px solid #f59e0b',
+        }}>
+          {def.label}
+        </div>
+      )}
+
+      {/* ── Progress dots ── */}
+      <div style={{
+        position: 'absolute',
+        top: '1.5vh',
+        right: '2vw',
+        display: 'flex',
+        gap: '0.4vw',
+        alignItems: 'center',
+      }}>
+        {Array.from({ length: MAX_CPU_STEP }, (_, i) => (
+          <div
+            key={i}
+            style={{
+              width: '0.6vw',
+              height: '0.6vw',
+              borderRadius: '50%',
+              backgroundColor: step > i ? '#f59e0b' : '#cbd5e1',
+              transition: 'background-color 0.3s',
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -3,3 +3,36 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body, #root { width: 100vw; height: 100vh; overflow: hidden; }
 body { background-color: #0f172a; font-family: 'Segoe UI', sans-serif; }
+
+@keyframes flowDash {
+  to { stroke-dashoffset: -20; }
+}
+
+@keyframes activePulse {
+  0%, 100% { box-shadow: 0 0 0 3px #f59e0b, 0 0 12px #f59e0b88; }
+  50%       { box-shadow: 0 0 0 3px #f59e0b, 0 0 24px #f59e0bcc; }
+}
+
+/* Data written into a register / IR: sweeps in from the right with a green flash */
+@keyframes dataReceive {
+  0%   { opacity: 0; transform: scale(0.8) translateX(12px); background-color: #22c55e; color: #fff; }
+  55%  { opacity: 1; transform: scale(1.1)  translateX(0);   background-color: #22c55e; color: #fff; }
+  80%  { transform: scale(0.97); background-color: #4fb3bf; color: inherit; }
+  100% { transform: scale(1);    background-color: #4fb3bf; color: inherit; }
+}
+
+/* PC value increments: bounces up then settles */
+@keyframes pcIncrement {
+  0%   { transform: scale(1)    translateY(0);   background-color: #4fb3bf; }
+  25%  { transform: scale(1.15) translateY(-6px); background-color: #22c55e; color: #fff; }
+  55%  { transform: scale(1.08) translateY(-3px); background-color: #22c55e; color: #fff; }
+  80%  { transform: scale(1.02) translateY(0);   background-color: #7dd3fc; color: inherit; }
+  100% { transform: scale(1)    translateY(0);   background-color: #4fb3bf; color: inherit; }
+}
+
+/* Dekodovani decodes RI: content resolves from blur */
+@keyframes decodingReveal {
+  0%   { opacity: 0.15; filter: blur(5px);  letter-spacing: 0.25em; }
+  50%  { opacity: 0.8;  filter: blur(1.5px); letter-spacing: 0.06em; }
+  100% { opacity: 1;    filter: blur(0);    letter-spacing: normal;  }
+}

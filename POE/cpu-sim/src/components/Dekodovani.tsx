@@ -1,10 +1,13 @@
 import type { DecodedInstruction } from '../types';
 
 interface Props {
-  decoded: DecodedInstruction;
+  decoded:      DecodedInstruction;
+  active?:      boolean;
+  animateDekod?: boolean;
+  stepKey:      number;
 }
 
-export default function Dekodovani({ decoded }: Props) {
+export default function Dekodovani({ decoded, active = false, animateDekod, stepKey }: Props) {
   return (
     <div
       id="dekodovani-box"
@@ -12,19 +15,30 @@ export default function Dekodovani({ decoded }: Props) {
       style={{
         width: '21vw',
         padding: '0.9vw',
-        backgroundColor: '#c48e8e',
-        border: '4px solid #333',
+        backgroundColor: active ? '#fef3c7' : '#c48e8e',
+        border: active ? '4px solid #f59e0b' : '4px solid #333',
+        animation: active ? 'activePulse 1.2s ease-in-out infinite' : undefined,
+        transition: 'background-color 0.3s, border-color 0.3s',
       }}
     >
       <h3
         className="text-center font-black uppercase border-b-4 border-black/10"
         style={{ fontSize: '1.5vw', marginBottom: '1vh', paddingBottom: '0.5vh' }}
       >
-        Dekodování
+        Dekódování
       </h3>
 
-      {/* Instruction split: opcode | operands */}
-      <div style={{ display: 'flex', backgroundColor: '#1d4ed8', borderRadius: '0.3vw', overflow: 'hidden' }}>
+      {/* Instruction bar — plays decodingReveal when content is first decoded */}
+      <div
+        key={animateDekod ? `dekod-anim-${stepKey}` : 'dekod'}
+        style={{
+          display: 'flex',
+          backgroundColor: '#1d4ed8',
+          borderRadius: '0.3vw',
+          overflow: 'hidden',
+          animation: animateDekod ? 'decodingReveal 0.7s ease-out forwards' : undefined,
+        }}
+      >
         <span
           id="instr-opcode"
           className="font-mono font-black text-white text-center"
@@ -46,19 +60,12 @@ export default function Dekodovani({ decoded }: Props) {
         </span>
       </div>
 
-      {/* Labels pointing up at their instruction column */}
       <div style={{ display: 'flex', marginTop: '0.5vh' }}>
-        <div
-          className="text-center font-black"
-          style={{ flex: '0 0 30%', fontSize: '0.9vw', lineHeight: 1.2 }}
-        >
+        <div className="text-center font-black" style={{ flex: '0 0 30%', fontSize: '0.9vw', lineHeight: 1.2 }}>
           <div style={{ fontSize: '1.1vw' }}>↑</div>
           OPERACE
         </div>
-        <div
-          className="text-center font-black"
-          style={{ flex: 1, fontSize: '0.9vw', lineHeight: 1.2 }}
-        >
+        <div className="text-center font-black" style={{ flex: 1, fontSize: '0.9vw', lineHeight: 1.2 }}>
           <div style={{ fontSize: '1.1vw' }}>↑</div>
           OPERANDY
         </div>

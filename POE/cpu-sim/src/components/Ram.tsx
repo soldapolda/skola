@@ -2,9 +2,10 @@ import type { RamRow } from '../types';
 
 interface Props {
   rows: RamRow[];
+  activeAddresses?: string[];
 }
 
-export default function Ram({ rows }: Props) {
+export default function Ram({ rows, activeAddresses = [] }: Props) {
   return (
     <div id="ram-panel" className="flex-1 flex flex-col h-full">
       <div
@@ -34,17 +35,29 @@ export default function Ram({ rows }: Props) {
 
           {/* Rows */}
           <div className="flex-1 font-mono text-white" style={{ fontSize: '1.4vw' }}>
-            {rows.map((row) => (
-              <div
-                key={row.address}
-                id={`ram-row-${row.address}`}
-                className={`grid grid-cols-2 border-b-2 border-black/20 text-center ${row.highlighted ? 'bg-yellow-500/40' : ''}`}
-                style={{ padding: '0.6vh 0' }}
-              >
-                <span>{row.address}</span>
-                <span>{row.data}</span>
-              </div>
-            ))}
+            {rows.map((row) => {
+              const stepActive = activeAddresses.includes(row.address);
+              return (
+                <div
+                  key={row.address}
+                  id={`ram-row-${row.address}`}
+                  className="grid grid-cols-2 border-b-2 border-black/20 text-center"
+                  style={{
+                    padding: '0.6vh 0',
+                    backgroundColor: stepActive
+                      ? '#f59e0b'
+                      : row.highlighted
+                        ? 'rgba(234,179,8,0.4)'
+                        : undefined,
+                    animation: stepActive ? 'activePulse 1.2s ease-in-out infinite' : undefined,
+                    transition: 'background-color 0.3s',
+                  }}
+                >
+                  <span>{row.address}</span>
+                  <span>{row.data}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
