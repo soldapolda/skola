@@ -30,6 +30,12 @@ body { background-color: #0f172a; font-family: 'Segoe UI', sans-serif; }
   100% { transform: scale(1)    translateY(0);   background-color: #4fb3bf; color: inherit; }
 }
 
+/* Flying packet departure flash */
+@keyframes flyDeparture {
+  0%   { background-color: #22c55e; box-shadow: 0 0 0 3px #22c55e, 0 4px 16px rgba(0,0,0,0.4); }
+  100% { background-color: #4fb3bf; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+}
+
 /* Dekodovani decodes RI: content resolves from blur */
 @keyframes decodingReveal {
   0%   { opacity: 0.15; filter: blur(5px);  letter-spacing: 0.25em; }

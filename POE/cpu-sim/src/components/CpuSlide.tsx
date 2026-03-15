@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import type { CpuState } from '../types';
 import { CPU_STEPS, MAX_CPU_STEP } from '../cpuSteps';
 import Registers from './Registers';
@@ -7,6 +7,7 @@ import Dekodovani from './Dekodovani';
 import ControlUnit from './ControlUnit';
 import Ram from './Ram';
 import Connections from './Connections';
+import FlyingValue from './FlyingValue';
 
 const BLANK_FLAGS = { I: 0, T: 0, H: 0, S: 0, V: 0, N: 0, Z: 0, C: 0 };
 
@@ -19,20 +20,49 @@ export default function CpuSlide({ state, step = 0 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const def = CPU_STEPS[Math.min(step, MAX_CPU_STEP)];
 
+  // Track which steps have completed their flight animation
+  const [arrivedSteps, setArrivedSteps] = useState<Set<number>>(new Set());
+  const prevStepRef = useRef(step);
+  useEffect(() => {
+    if (step < prevStepRef.current) {
+      setArrivedSteps(prev => {
+        const next = new Set(prev);
+        [...next].filter(s => s > step).forEach(s => next.delete(s));
+        return next;
+      });
+    }
+    prevStepRef.current = step;
+  }, [step]);
+
+  const flightDone = arrivedSteps.has(step);
+
+  // Resolve 'ram-row-pc' sentinel to the actual PC-addressed row ID
+  const resolvedFlight = def.flight ? {
+    ...def.flight,
+    fromId: def.flight.fromId === 'ram-row-pc'
+      ? `ram-row-${state.controlUnit.pc}`
+      : def.flight.fromId,
+  } : undefined;
+
+  // Suppress destination value while flying
+  const displayIr       = (resolvedFlight?.toId === 'ri-row'        && !flightDone) ? '—' : def.displayIr;
+  const displayOpcode   = (resolvedFlight?.toId === 'dekodovani-box' && !flightDone) ? '' : def.displayOpcode;
+  const displayOperands = (resolvedFlight?.toId === 'dekodovani-box' && !flightDone) ? '' : def.displayOperands;
+
   // Build the state that should be displayed at this step
   const displayState: CpuState = {
     registers: state.registers.map(r =>
       r.name === 'R0' ? { ...r, value: def.displayR0 } : r
     ),
     controlUnit: {
-      ir:    def.displayIr,
+      ir:    displayIr,
       pc:    def.displayPc,
       flags: def.displayFlags ? state.controlUnit.flags : BLANK_FLAGS,
     },
     decoded: {
-      raw:      def.displayOpcode ? `${def.displayOpcode} ${def.displayOperands}` : '',
-      opcode:   def.displayOpcode,
-      operands: def.displayOperands,
+      raw:      displayOpcode ? `${displayOpcode} ${displayOperands}` : '',
+      opcode:   displayOpcode,
+      operands: displayOperands,
     },
     ram: state.ram,
   };
@@ -103,6 +133,18 @@ export default function CpuSlide({ state, step = 0 }: Props) {
         pcAddress={state.controlUnit.pc}
         activeTypes={def.activeConnections}
       />
+
+      {/* ── Flying value packet ── */}
+      {resolvedFlight && !flightDone && (
+        <FlyingValue
+          fromId={resolvedFlight.fromId}
+          toId={resolvedFlight.toId}
+          value={resolvedFlight.value}
+          triggerKey={step}
+          containerRef={containerRef}
+          onArrived={() => setArrivedSteps(prev => new Set([...prev, step]))}
+        />
+      )}
 
       {/* ── Step label ── */}
       {def.label && (

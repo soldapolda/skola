@@ -28,7 +28,8 @@ src/data.ts (initialState: CpuState)
         ├── Dekodovani    — decoded instruction (opcode + operands)
         ├── ControlUnit   — IR, PC, and 8-bit SREG flags
         ├── Ram           — address/data memory table
-        └── Connections   — SVG overlay drawing data-flow lines between the above
+        ├── Connections   — SVG overlay drawing data-flow lines between the above
+        └── FlyingValue   — animated packet that physically moves between components
 ```
 
 ### Key types (`src/types.ts`)
@@ -38,6 +39,16 @@ src/data.ts (initialState: CpuState)
 - `StatusFlags` — 8 CPU flags: I, T, H, S, V, N, Z, C
 - `DecodedInstruction` — `raw`, `opcode`, `operands`
 - `RamRow` — `address`, `data`, optional `highlighted`
+
+### Flying value transitions (`src/components/FlyingValue.tsx`)
+
+Animates a styled "data packet" div moving between two DOM elements:
+- Triggered by steps that have a `flight` field in `CpuStepDef` (`src/cpuSteps.ts`)
+- `flight.fromId` / `flight.toId` are element IDs; `'ram-row-pc'` is a sentinel resolved at runtime to `ram-row-${pc}`
+- Uses `useElementRects` to measure positions, then CSS `transition: transform` (GPU-accelerated) to fly the packet
+- Two-phase: destination shows `'—'`/blank while in-flight; on arrival (`onTransitionEnd`) the existing `dataReceive`/`decodingReveal` animations play on the destination
+- `CpuSlide` tracks `arrivedSteps: Set<number>`; clears arrivals for steps beyond current when stepping backward
+- Currently active on step 2 (RAM → RI) and step 4 (RI → Dekodovani)
 
 ### Connections component (`src/components/Connections.tsx`)
 
