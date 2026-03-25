@@ -21,7 +21,7 @@ export default function Ram({ rows, activeAddresses = [] }: Props) {
             className="text-white text-center font-black uppercase"
             style={{ fontSize: '1.6vw', padding: '0.6vh 0', backgroundColor: 'rgba(0,0,0,0.6)' }}
           >
-            RAM
+            FLASH
           </div>
 
           {/* Column headers */}

@@ -5,7 +5,7 @@ import type { ConnectionType } from '../cpuSteps';
 // ── colours ───────────────────────────────────────────────────────────────────
 
 const C = {
-  reg:   '#3b82f6', // blue   — R0-R3 → ALU
+  reg:   '#3b82f6', // blue   — R16-R19 → ALU
   dekod: '#f97316', // orange — Dekodovani → ALU, Dekodovani → RI
   alu:   '#a855f7', // purple — ALU → SREG
   pc:    '#22c55e', // green  — PC → ALU, PC → RAM
@@ -42,7 +42,7 @@ interface Line { d: string; color: string; type: ConnectionType }
 
 export default function Connections({ containerRef, pcAddress, activeTypes }: Props) {
   const IDS = [
-    'reg-R0', 'reg-R1', 'reg-R2', 'reg-R3',
+    'reg-R16', 'reg-R17', 'reg-R18', 'reg-R19',
     'alu-shape', 'dekodovani-box', 'cu-box', 'cpu-outer',
     'ri-row', 'pc-row', 'sreg-box',
     `ram-row-${pcAddress}`,
@@ -77,7 +77,7 @@ export default function Connections({ containerRef, pcAddress, activeTypes }: Pr
 
   // 1. Registers → ALU top (blue) — one connection type per register
   const regFracs = [0.15, 0.38, 0.62, 0.85];
-  (['R0', 'R1', 'R2', 'R3'] as const).forEach((name, i) => {
+  (['R16', 'R17', 'R18', 'R19'] as const).forEach((name, i) => {
     const reg = r[`reg-${name}`];
     if (!reg) return;
     const rx = midX(reg);

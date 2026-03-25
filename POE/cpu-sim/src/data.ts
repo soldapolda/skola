@@ -2,10 +2,10 @@ import type { CpuState } from './types';
 
 export const initialState: CpuState = {
   registers: [
-    { name: 'R0', value: '—' },
-    { name: 'R1', value: '—' },
-    { name: 'R2', value: '—' },
-    { name: 'R3', value: '—' },
+    { name: 'R16', value: '—' },
+    { name: 'R17', value: '—' },
+    { name: 'R18', value: '—' },
+    { name: 'R19', value: '—' },
   ],
   controlUnit: {
     ir: '—',
@@ -18,8 +18,8 @@ export const initialState: CpuState = {
     operands: '',
   },
   ram: [
-    { address: '0x00', data: '0xE09F' },   // LDI R0, 0x9F
-    { address: '0x01', data: '0xE1A0' },   // LDI R1, 0xA0
-    { address: '0x02', data: '0x0C01' },   // ADD R0, R1
+    { address: '0x00', data: '0xE09F' },   // LDI R16, 0x9F
+    { address: '0x01', data: '0xE1A0' },   // LDI R17, 0xA0
+    { address: '0x02', data: '0x0C01' },   // ADD R16, R17
   ],
 };

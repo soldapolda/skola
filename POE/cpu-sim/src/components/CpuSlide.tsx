@@ -53,14 +53,14 @@ export default function CpuSlide({ state, step = 0 }: Props) {
 
   // Registers whose write animation fires this step
   const animateRegNames = [
-    ...(def.animateR0 ? ['R0'] : []),
-    ...(def.animateR1 ? ['R1'] : []),
+    ...(def.animateR16 ? ['R16'] : []),
+    ...(def.animateR17 ? ['R17'] : []),
   ];
 
   const displayState: CpuState = {
     registers: state.registers.map(r => {
-      if (r.name === 'R0') return { ...r, value: def.displayR0 };
-      if (r.name === 'R1') return { ...r, value: def.displayR1 };
+      if (r.name === 'R16') return { ...r, value: def.displayR16 };
+      if (r.name === 'R17') return { ...r, value: def.displayR17 };
       return r;
     }),
     controlUnit: {
