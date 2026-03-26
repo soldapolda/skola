@@ -18,6 +18,7 @@ export interface RamRow {
   address: string;
   data: string;
   label?: string;       // human-readable instruction, e.g. "LDI R16, 0x9F"
+  loopLabel?: string;   // label marker, e.g. "loop:", "for_loop:", "skip_reset:"
   highlighted?: boolean;
 }
 
@@ -25,4 +26,5 @@ export interface CpuState {
   registers: Register[];
   controlUnit: ControlUnit;
   ram: RamRow[];
+  portF: string;
 }

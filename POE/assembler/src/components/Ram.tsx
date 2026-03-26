@@ -5,6 +5,8 @@ interface Props {
   activeAddresses?: string[];
 }
 
+const COLS = '2fr 3fr 5fr';
+
 export default function Ram({ rows, activeAddresses = [] }: Props) {
   return (
     <div id="ram-panel" className="flex-1 flex flex-col h-full">
@@ -28,18 +30,19 @@ export default function Ram({ rows, activeAddresses = [] }: Props) {
           <div
             className="grid border-b-4 border-black text-white font-black uppercase text-center"
             style={{
-              gridTemplateColumns: '2fr 5fr',
-              fontSize: '1.2vw',
+              gridTemplateColumns: COLS,
+              fontSize: '1.1vw',
               padding: '0.5vh 0',
               backgroundColor: 'rgba(0,0,0,0.5)',
             }}
           >
             <span>Adr.</span>
+            <span style={{ color: '#fbbf24' }}>Návěstí</span>
             <span>Instrukce</span>
           </div>
 
           {/* Rows */}
-          <div className="flex-1 text-white" style={{ fontSize: '1.3vw' }}>
+          <div className="flex-1 text-white" style={{ fontSize: '1.2vw' }}>
             {rows.map((row) => {
               const stepActive = activeAddresses.includes(row.address);
               return (
@@ -48,8 +51,8 @@ export default function Ram({ rows, activeAddresses = [] }: Props) {
                   id={`ram-row-${row.address}`}
                   className="grid border-b-2 border-black/20 text-center"
                   style={{
-                    gridTemplateColumns: '2fr 5fr',
-                    padding: '0.7vh 0',
+                    gridTemplateColumns: COLS,
+                    padding: '0.55vh 0',
                     backgroundColor: stepActive
                       ? '#f59e0b'
                       : row.highlighted
@@ -60,6 +63,16 @@ export default function Ram({ rows, activeAddresses = [] }: Props) {
                   }}
                 >
                   <span className="font-mono">{row.address}</span>
+                  <span
+                    className="font-mono font-black"
+                    style={{
+                      color: stepActive ? '#7c3aed' : '#fbbf24',
+                      fontSize: '1vw',
+                      alignSelf: 'center',
+                    }}
+                  >
+                    {row.loopLabel ?? ''}
+                  </span>
                   <span className="font-bold" style={{ fontFamily: "'Segoe UI', sans-serif" }}>
                     {row.label ?? row.data}
                   </span>

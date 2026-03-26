@@ -5,10 +5,11 @@ import type { ConnectionType } from '../cpuSteps';
 // ── colours ───────────────────────────────────────────────────────────────────
 
 const C = {
-  reg:  '#3b82f6', // blue   — registers → ALU
-  ri:   '#f97316', // orange — RI → ALU
-  alu:  '#a855f7', // purple — ALU → SREG
-  pc:   '#22c55e', // green  — PC → FLASH
+  reg:   '#3b82f6', // blue   — registers → ALU
+  ri:    '#f97316', // orange — RI → ALU
+  alu:   '#a855f7', // purple — ALU → SREG
+  pc:    '#22c55e', // green  — PC → FLASH
+  portf: '#ef4444', // red    — CPU → PORTF
 } as const;
 
 const SW = 4;
@@ -25,12 +26,7 @@ function hv(x1: number, y1: number, x2: number, y2: number): string {
   return `M ${x1} ${y1} H ${x2} V ${y2}`;
 }
 
-// Move vertically then horizontally
-function vh(x1: number, y1: number, x2: number, y2: number): string {
-  return `M ${x1} ${y1} V ${y2} H ${x2}`;
-}
-
-// ── component ─────────────────────────────────────────────────────────────────
+//── component ─────────────────────────────────────────────────────────────────
 
 interface Props {
   containerRef: RefObject<HTMLDivElement | null>;
@@ -47,19 +43,21 @@ export default function Connections({ containerRef, pcAddress, activeTypes }: Pr
     'alu-shape', 'cu-box', 'cpu-outer',
     'ri-row', 'pc-row', 'sreg-box',
     `ram-row-${pcAddress}`,
+    'portf-panel',
   ];
 
   const r = useElementRects(IDS, containerRef);
 
-  const alu      = r['alu-shape'];
-  const cu       = r['cu-box'];
-  const cpuOuter = r['cpu-outer'];
-  const ri       = r['ri-row'];
-  const pc       = r['pc-row'];
-  const sreg     = r['sreg-box'];
-  const pcRow    = r[`ram-row-${pcAddress}`];
-  const r21      = r['reg-R21'];
-  const r22      = r['reg-R22'];
+  const alu       = r['alu-shape'];
+  const cu        = r['cu-box'];
+  const cpuOuter  = r['cpu-outer'];
+  const ri        = r['ri-row'];
+  const pc        = r['pc-row'];
+  const sreg      = r['sreg-box'];
+  const pcRow     = r[`ram-row-${pcAddress}`];
+  const r21       = r['reg-R21'];
+  const r22       = r['reg-R22'];
+  const portfPanel = r['portf-panel'];
 
   if (!alu || !cu || !cpuOuter || !ri || !pc || !sreg) return null;
 
@@ -152,6 +150,20 @@ export default function Connections({ containerRef, pcAddress, activeTypes }: Pr
       d: hv(pc.left + pc.width, py, gapX, py) + ` V ${rry} H ${pcRow.left}`,
       color: C.pc,
       type: 'pc-ram',
+    });
+  }
+
+  // ── 6. CPU → PORTF panel (red) ────────────────────────────────────────────
+  if (portfPanel) {
+    const r17    = r['reg-R17'];
+    const srcY   = r17 ? midY(r17) : midY(ri);
+    const dstY   = midY(portfPanel);
+    const cpuR   = cpuOuter.left + cpuOuter.width;
+    const gapX   = cpuR + (portfPanel.left - cpuR) / 2;
+    lines.push({
+      d: `M ${cpuR} ${srcY} H ${gapX} V ${dstY} H ${portfPanel.left}`,
+      color: C.portf,
+      type: 'portf-out',
     });
   }
 

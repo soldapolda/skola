@@ -5,11 +5,12 @@ import Registers from './Registers';
 import Alu from './Alu';
 import ControlUnit from './ControlUnit';
 import Ram from './Ram';
+import PortPanel from './PortPanel';
 import Connections from './Connections';
 import FlyingValue from './FlyingValue';
 
 const BLANK_FLAGS = { I: 0, T: 0, H: 0, S: 0, V: 0, N: 0, Z: 0, C: 0 };
-const ADD_FLAGS   = { I: 0, T: 0, H: 0, S: 1, V: 1, N: 0, Z: 0, C: 1 };
+const Z_FLAGS     = { I: 0, T: 0, H: 0, S: 0, V: 0, N: 0, Z: 1, C: 0 };
 
 interface Props {
   state: CpuState;
@@ -47,20 +48,23 @@ export default function CpuSlide({ state, step = 0 }: Props) {
   const animateRegNames = [
     ...(def.animateR16 ? ['R16'] : []),
     ...(def.animateR17 ? ['R17'] : []),
+    ...(def.animateR18 ? ['R18'] : []),
   ];
 
   const displayState: CpuState = {
     registers: state.registers.map(r => {
       if (r.name === 'R16') return { ...r, value: def.displayR16 };
       if (r.name === 'R17') return { ...r, value: def.displayR17 };
+      if (r.name === 'R18') return { ...r, value: def.displayR18 };
       return r;
     }),
     controlUnit: {
       ir:    displayIr,
       pc:    def.displayPc,
-      flags: def.displayFlags ? ADD_FLAGS : BLANK_FLAGS,
+      flags: def.displayFlagZ ? Z_FLAGS : BLANK_FLAGS,
     },
     ram: state.ram,
+    portF: def.displayPortF,
   };
 
   const activeRamAddresses = def.activeRamRow ? [def.displayPc] : [];
@@ -77,18 +81,23 @@ export default function CpuSlide({ state, step = 0 }: Props) {
         width: '100vw',
         height: '100vh',
         padding: '1.2vw',
-        gap: '4vw',
+        gap: '2vw',
         backgroundColor: '#f1f5f9',
         boxShadow: '0 40px 120px rgba(0,0,0,0.8), 0 0 0 3px #334155',
         overflow: 'hidden',
         fontFamily: "'Segoe UI', sans-serif",
       }}
     >
-      {/* ── CPU ── */}
-      <div className="flex-[3] flex flex-col h-full">
+      {/* ── CPU + PORTF above ── */}
+      <div className="flex-[3] flex flex-col h-full" style={{ gap: '1.5vh' }}>
+        <PortPanel
+          portF={displayState.portF}
+          active={def.activePortF}
+          stepKey={step}
+        />
         <div
           id="cpu-outer"
-          className="flex flex-col h-full shadow-2xl"
+          className="flex flex-col flex-1 shadow-2xl"
           style={{
             backgroundColor: '#d1b3b3',
             border: '5px solid #8d6e63',
@@ -129,8 +138,10 @@ export default function CpuSlide({ state, step = 0 }: Props) {
         </div>
       </div>
 
-      {/* ── FLASH ── */}
-      <Ram rows={displayState.ram} activeAddresses={activeRamAddresses} />
+      {/* ── Right column: FLASH ── */}
+      <div className="flex-1 flex flex-col h-full">
+        <Ram rows={displayState.ram} activeAddresses={activeRamAddresses} />
+      </div>
 
       {/* ── SVG connections ── */}
       <Connections
@@ -162,7 +173,7 @@ export default function CpuSlide({ state, step = 0 }: Props) {
           color: '#fef3c7',
           padding: '0.7vh 2.2vw',
           borderRadius: '0.8vw',
-          fontSize: '1.4vw',
+          fontSize: '1.3vw',
           fontWeight: 700,
           whiteSpace: 'nowrap',
           border: '2px solid #f59e0b',
