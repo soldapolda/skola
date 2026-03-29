@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  base: '/skola/POE/cpu-sim/',
+  base: '/skola/POE/assembler-sim/',
   plugins: [react(), tailwindcss()],
 })
