@@ -1,13 +1,12 @@
-import type { ControlUnit as ControlUnitType } from '../types';
+import type { StatusFlags } from '../types';
 
 const FLAG_KEYS = ['I', 'T', 'H', 'S', 'V', 'N', 'Z', 'C'] as const;
 
 interface Props {
-  controlUnit: ControlUnitType;
-  activeFields?: Array<'ir' | 'pc' | 'sreg'>;
-  animateIr?:   boolean;
-  animatePc?:   boolean;
-  stepKey:      number;
+  sreg:          StatusFlags;
+  activeFields?: Array<'pc' | 'sreg'>;
+  animatePc?:    boolean;
+  stepKey:       number;
 }
 
 const ACTIVE_ROW: React.CSSProperties = {
@@ -17,28 +16,7 @@ const ACTIVE_ROW: React.CSSProperties = {
   animation: 'activePulse 1.2s ease-in-out infinite',
 };
 
-export default function ControlUnit({ controlUnit, activeFields = [], animateIr, animatePc, stepKey }: Props) {
-  const { ir, pc, flags } = controlUnit;
-
-  const irValueStyle: React.CSSProperties = {
-    fontSize: '1.3vw',
-    padding: '0.4vh 1vw',
-    minWidth: '12vw',
-    backgroundColor: '#4fb3bf',
-    border: '3px solid #000',
-    whiteSpace: 'nowrap',
-    ...(animateIr ? { animation: 'dataReceive 0.75s ease-out forwards' } : {}),
-  };
-
-  const pcValueStyle: React.CSSProperties = {
-    fontSize: '1.6vw',
-    padding: '0.4vh 0.6vw',
-    width: '8vw',
-    backgroundColor: '#4fb3bf',
-    border: '3px solid #000',
-    ...(animatePc ? { animation: 'pcIncrement 0.85s ease-out forwards' } : {}),
-  };
-
+export default function ControlUnit({ sreg, activeFields = [], animatePc, stepKey }: Props) {
   return (
     <div
       id="cu-box"
@@ -53,23 +31,7 @@ export default function ControlUnit({ controlUnit, activeFields = [], animateIr,
       </h3>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8vh' }}>
-        {/* RI */}
-        <div
-          id="ri-row"
-          className="flex items-center justify-between"
-          style={activeFields.includes('ir') ? ACTIVE_ROW : undefined}
-        >
-          <span className="font-black" style={{ fontSize: '1.1vw' }}>Registr Instrukce (RI):</span>
-          <div
-            key={animateIr ? `ir-anim-${stepKey}` : 'ir'}
-            className="font-mono text-center"
-            style={irValueStyle}
-          >
-            {ir}
-          </div>
-        </div>
-
-        {/* PC */}
+        {/* PC — shows a pointer arrow; the green connection line points to the Flash row */}
         <div
           id="pc-row"
           className="flex items-center justify-between"
@@ -79,9 +41,14 @@ export default function ControlUnit({ controlUnit, activeFields = [], animateIr,
           <div
             key={animatePc ? `pc-anim-${stepKey}` : 'pc'}
             className="font-mono text-center"
-            style={pcValueStyle}
+            style={{
+              fontSize: '2vw',
+              padding: '0.2vh 0.8vw',
+              color: activeFields.includes('pc') ? '#92400e' : '#1e3a5f',
+              ...(animatePc ? { animation: 'pcIncrement 0.85s ease-out forwards' } : {}),
+            }}
           >
-            {pc}
+            →
           </div>
         </div>
 
@@ -108,7 +75,7 @@ export default function ControlUnit({ controlUnit, activeFields = [], animateIr,
                 className={`flex-1 ${i < FLAG_KEYS.length - 1 ? 'border-r-2 border-black' : ''}`}
                 style={{ fontSize: '1.3vw', padding: '0.25vh 0' }}
               >
-                {flags[key]}
+                {sreg[key]}
               </div>
             ))}
           </div>

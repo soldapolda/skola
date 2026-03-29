@@ -16,51 +16,89 @@ No test suite is configured.
 
 ## Architecture
 
-This is an **interactive AVR assembler simulator visualization** (`assembler-sim`) for educational purposes (Czech language UI). It renders a step-driven CPU state as a visual diagram with animated SVG connection lines. Navigation is via ← → arrow keys (17 steps total, 0–16).
+This is an **interactive AVR emulator visualization** (`assembler-sim`) for educational purposes (Czech language UI). It dynamically executes a hardcoded AVR program step-by-step with animated SVG connections and a flying-value packet. Navigation is via **Step button**, **→/Space** (advance), **←** (reset).
+
+### Execution model
+
+The emulator runs a 3-phase cycle driven by a single `stepEmulator()` function:
+
+```
+fetch  →  execute  →  writeback  →  fetch  →  …
+```
+
+- **Fetch**: PC highlights a Flash row; instruction packet flies from Flash → ALU.
+- **Execute**: ALU activates; instruction result is computed (not yet applied).
+- **Writeback**: Result committed to registers / PORTF / SREG; PC advances.
+
+There is **no IR (Instruction Register)** — the instruction flies directly to the ALU.
+
+### Default program (`src/data.ts`)
+
+Interactive LED scanner controlled by two active-low PINK buttons:
+
+```asm
+.org 0
+jmp Program           ; 0x00–0x01  (2-word JMP)
+Program:
+    ldi r16, 0xff     ; 0x02
+    out DDRF, r16     ; 0x03
+    ldi r17, 0x00     ; 0x04
+reset:
+    ldi r20, 0x00     ; 0x05
+main:
+    lds r18, PINK     ; 0x06–0x07  (2-word LDS, PINK = 0x106)
+    sbrc r18, 0       ; 0x08  — skip RJMP if B0 pressed (bit=0)
+    rjmp inc          ; 0x09
+    dec r20           ; 0x0A
+    rjmp update       ; 0x0B
+inc:
+    inc r20           ; 0x0C
+update:
+    out PORTF, r20    ; 0x0D
+    sbrc r18, 1       ; 0x0E  — if B1 pressed, rjmp reset
+    rjmp main         ; 0x0F
+    rjmp reset        ; 0x10
+```
+
+### Supported instructions (`src/logic/emulator.ts`)
+
+`LDI`, `OUT` (PORTF / DDRF), `LDS`, `INC`, `DEC`, `SBRC`, `RJMP`, `JMP`
+
+32-bit (2-word) instructions: **JMP**, **LDS** — PC increments by 2 after these.
+
+**SBRC skip logic**: on writeback, looks ahead at the next instruction's word count to skip the correct number of words.
 
 ### Data flow
 
 ```
-src/data.ts (initialState: CpuState)
-  → App.tsx  (keyboard nav: ←/→ controls cpuStep 0–16)
-    → CpuSlide.tsx  (full-screen layout, derives display state from cpuStep)
-        ├── Registers (top)  — R16–R19 above ALU
-        ├── Alu              — trapezoid, 22vh, clip-path bottom spans only 25%–75%
-        ├── Registers (bot)  — R20–R23 below ALU
-        ├── ControlUnit      — RI (instruction text), PC, SREG flags — 32vw, bottom-right
-        ├── Ram              — FLASH panel: address + human-readable instruction
-        ├── Connections      — SVG overlay with color-coded data-flow lines
-        └── FlyingValue      — animated packet flying between DOM elements
+App.tsx (EmulatorState + stepEmulator / resetEmulator)
+  → CpuSlide.tsx  (derives all display props from EmulatorState)
+      ├── PortPanel        — PORTF LEDs (top-left)
+      ├── ButtonPanel      — PINK buttons, active-low (top-left, id=pink-panel)
+      ├── Registers (top)  — R16–R19 above ALU
+      ├── Alu              — trapezoid, id=alu-shape; lit during execute
+      ├── Registers (bot)  — R20–R23 below ALU
+      ├── ControlUnit      — PC + SREG only (IR removed)
+      ├── Ram              — FLASH panel showing FlashWord[] (second words dimmed)
+      ├── Connections      — SVG overlay with color-coded data-flow lines
+      └── FlyingValue      — packet from Flash row → alu-shape during fetch
 ```
 
 ### Key types (`src/types.ts`)
 
-- `CpuState` — `registers: Register[]`, `controlUnit: ControlUnit`, `ram: RamRow[]`
-- `ControlUnit` — `ir: string`, `pc: string`, `flags: StatusFlags`
-- `StatusFlags` — 8 AVR flags: I, T, H, S, V, N, Z, C
-- `RamRow` — `address`, `data`, optional `label` (e.g. `"LDI R16, 0x9F"`), optional `highlighted`
+- `EmulatorState` — `phase`, `pc`, `registers[32]`, `portF`, `ddrF`, `pink`, `sreg`, `flash`, `currentInstruction`, `flightKey`
+- `ExecPhase` — `'fetch' | 'execute' | 'writeback'`
+- `Instruction` — discriminated union: `LDI | OUT | LDS | INC | DEC | SBRC | RJMP | JMP | WORD`
+- `FlashWord` — `address`, `hex`, `label`, `loopLabel?`, `isSecondWord?`, `instr`
+- `DecodedInstruction` — fetched+executed instruction carrying `result`, `newSreg`, `skip`, `jumpTarget`
+- `ConnectionType` — SVG bus lines; `reg-RXX-alu | alu-sreg | pc-ram | portf-out | pink-in`
 
-### Step definitions (`src/cpuSteps.ts`)
+### PINK register
 
-`CPU_STEPS: CpuStepDef[]` — 17 entries (index 0 = blank slate, then 5 steps × 3 instructions).
-
-Each instruction cycle: **Fetch → Load RI → PC++ → ALU execute → Write register** (+ SREG update on ADD).
-
-Key `CpuStepDef` fields:
-- `displayIr` — human-readable instruction string shown in RI (e.g. `'LDI R16, 0x9F'`) or `'—'`
-- `displayPc`, `displayR16`, `displayR17`, `displayFlags`
-- `activeConnections: ConnectionType[]` — which SVG lines animate as active
-- `flight?: FlightDef` — triggers a flying value packet (carries raw hex opcode)
-- `activeRegisters`, `activeFields`, `activeAlu`, `activeRamRow`
-
-`ConnectionType` values: `reg-R16-alu` … `reg-R23-alu` | `ri-alu` | `alu-sreg` | `pc-ram`
-
-### Flying value transitions (`src/components/FlyingValue.tsx`)
-
-- Triggered by steps with a `flight` field; `'ram-row-pc'` sentinel resolves to `ram-row-${pc}` at runtime
-- Packet carries the raw hex opcode (e.g. `0xE09F`); destination shows `'—'` while in-flight
-- On arrival (`onTransitionEnd`): `dataReceive` animation plays on RI, which then shows the decoded instruction text
-- `CpuSlide` tracks `arrivedSteps: Set<number>`; backward navigation clears future arrivals
+- Data memory address `0x106` (ATmega2560 Port K input)
+- **Active-low**: default `0xFF` (all bits 1 = all buttons released)
+- Pressing a button in ButtonPanel toggles the corresponding bit to `0`
+- Read by `LDS R18, PINK` at runtime; bit tests via `SBRC`
 
 ### Connections (`src/components/Connections.tsx`)
 
@@ -69,23 +107,29 @@ Color-coded orthogonal SVG paths via `useElementRects` hook:
 | Color  | Route |
 |--------|-------|
 | Blue   | R16–R19 → ALU top; R20–R23 → ALU bottom |
-| Orange | RI → ALU bottom (via R21/R22 center lane) |
-| Purple | ALU → SREG (via same R21/R22 center lane) |
+| Orange | PINK buttons → ALU top (via cpu-outer left edge) |
+| Purple | ALU → SREG (via R21/R22 center lane) |
 | Green  | PC → FLASH row |
+| Red    | CPU → PORTF panel |
 
-**Key routing rules:**
-- Top fracs for R16–R19 on ALU top: `[0.13, 0.35, 0.65, 0.87]`
-- Bottom fracs for R20–R23 on ALU bottom: `[0.28, 0.38, 0.62, 0.72]` — must stay within the 25%–75% trapezoid bottom edge
-- `laneX` = midpoint between `reg-R21` right edge and `reg-R22` left edge — reserved vertical channel for RI and SREG lines
-- Inactive connections render at `opacity: 0.10`
+`laneX` = midpoint between `reg-R21` right and `reg-R22` left — reserved for SREG line.
+
+### Flying value (`src/components/FlyingValue.tsx`)
+
+- Source: `ram-row-${hexPc}` (the Flash row at the current PC)
+- Destination: `alu-shape`
+- Triggered by `flightKey` (increments in `resetEmulator` → `commit`)
+- Visible only during `phase === 'fetch'`; unmounts when phase advances
 
 ### Layout (`src/components/CpuSlide.tsx`)
 
-`cpu-outer` is a `flex flex-col h-full` box. Children in order:
-1. `Registers` — `registers.slice(0, 4)` (R16–R19)
-2. `Alu`
-3. `Registers` — `registers.slice(4, 8)` (R20–R23)
-4. `ControlUnit` — wrapped in `{ marginTop: 'auto', justifyContent: 'flex-end' }` to pin to bottom-right
+Left column (`flex-[3]`):
+1. Top panels row: `PortPanel` + `ButtonPanel` (side by side)
+2. `cpu-outer` flex-col: Registers(top) → ALU → Registers(bot) → ControlUnit(bottom-right)
+
+Right column (`flex-1`): `Ram` (FLASH panel)
+
+Phase badge (top-left) + step label (bottom-centre) + Step/Reset buttons (bottom-right).
 
 ### Styling
 

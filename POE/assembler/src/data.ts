@@ -1,35 +1,67 @@
-import type { CpuState } from './types';
+import type { FlashWord } from './types';
 
-export const initialState: CpuState = {
-  registers: [
-    { name: 'R16', value: '—' },
-    { name: 'R17', value: '—' },
-    { name: 'R18', value: '—' },
-    { name: 'R19', value: '—' },
-    { name: 'R20', value: '—' },
-    { name: 'R21', value: '—' },
-    { name: 'R22', value: '—' },
-    { name: 'R23', value: '—' },
-  ],
-  controlUnit: {
-    ir: '—',
-    pc: '0x00',
-    flags: { I: 0, T: 0, H: 0, S: 0, V: 0, N: 0, Z: 0, C: 0 },
-  },
-  ram: [
-    { address: '0x00', data: '0x940C', label: 'JMP Program' },
-    { address: '0x01', data: '0xEF0F', label: 'LDI R16, 0xFF' },
-    { address: '0x02', data: '0x9300', label: 'STS DDRF, R16' },
-    { address: '0x03', data: '0xE001', label: 'LDI R17, 0x01' },
-    { address: '0x04', data: '0x9310', label: 'STS PORTF, R17',  loopLabel: 'loop:' },
-    { address: '0x05', data: '0xEF2F', label: 'LDI R18, 0xFF' },
-    { address: '0x06', data: '0x952A', label: 'DEC R18',          loopLabel: 'for_loop:' },
-    { address: '0x07', data: '0xF7E1', label: 'BRNE for_loop' },
-    { address: '0x08', data: '0x0F11', label: 'LSL R17' },
-    { address: '0x09', data: '0x2011', label: 'TST R17' },
-    { address: '0x0A', data: '0xF411', label: 'BRNE skip_reset' },
-    { address: '0x0B', data: '0xE001', label: 'LDI R17, 0x01' },
-    { address: '0x0C', data: '0xCFF3', label: 'RJMP loop',        loopLabel: 'skip_reset:' },
-  ],
-  portF: '0x00',
-};
+/**
+ * Default program: interactive LED value on PORTF, controlled by two PINK buttons.
+ *
+ * Button B0 (bit 0 of PINK) — active-low: press increments R20
+ * Button B1 (bit 1 of PINK) — active-low: press returns to reset
+ *
+ * Assembly source:
+ *   .org 0
+ *   jmp Program
+ *   Program:
+ *       ldi r16, 0xff
+ *       out DDRF, r16
+ *       ldi r17, 0x00
+ *   reset:
+ *       ldi r20, 0x00
+ *   main:
+ *       lds r18, PINK
+ *       sbrc r18, 0
+ *       rjmp inc
+ *       dec r20
+ *       rjmp update
+ *   inc:
+ *       inc r20
+ *   update:
+ *       out PORTF, r20
+ *       sbrc r18, 1
+ *       rjmp main
+ *       rjmp reset
+ */
+export const DEFAULT_FLASH: FlashWord[] = [
+  // Reset vector — JMP to Program (2 words)
+  { address: 0x00, hex: '0x940C', label: 'JMP Program',   instr: { op: 'JMP',  target: 0x02 } },
+  { address: 0x01, hex: '0x0002', label: '[0x0002]',       instr: { op: 'WORD', value:  0x0002 }, isSecondWord: true },
+
+  // Initialisation
+  { address: 0x02, hex: '0xEF0F', label: 'LDI R16, 0xFF', instr: { op: 'LDI', rd: 16, k: 0xFF }, loopLabel: 'Program:' },
+  { address: 0x03, hex: '0xBB00', label: 'OUT DDRF, R16', instr: { op: 'OUT', port: 'DDRF',  rr: 16 } },
+  { address: 0x04, hex: '0xE010', label: 'LDI R17, 0x00', instr: { op: 'LDI', rd: 17, k: 0x00 } },
+
+  // reset:
+  { address: 0x05, hex: '0xEF4F', label: 'LDI R20, 0xFF', instr: { op: 'LDI', rd: 20, k: 0xFF }, loopLabel: 'reset:' },
+
+  // main: — read PINK (2-word LDS)
+  { address: 0x06, hex: '0x9120', label: 'LDS R18, PINK', instr: { op: 'LDS', rd: 18, addr: 0x106 }, loopLabel: 'main:' },
+  { address: 0x07, hex: '0x0106', label: '[0x0106]',       instr: { op: 'WORD', value: 0x0106 }, isSecondWord: true },
+
+  // Test bit 0 — skip RJMP inc if bit is SET (active-low: SET means button NOT pressed)
+  { address: 0x08, hex: '0xFD20', label: 'SBRC R18, 0',   instr: { op: 'SBRC', rr: 18, bit: 0 } },
+  { address: 0x09, hex: '0xC002', label: 'RJMP inc',       instr: { op: 'RJMP', target: 0x0C } },
+
+  // Button NOT pressed path: decrement
+  { address: 0x0A, hex: '0x954A', label: 'DEC R20',        instr: { op: 'DEC', rd: 20 } },
+  { address: 0x0B, hex: '0xC001', label: 'RJMP update',    instr: { op: 'RJMP', target: 0x0D } },
+
+  // inc:
+  { address: 0x0C, hex: '0x9443', label: 'INC R20',        instr: { op: 'INC', rd: 20 }, loopLabel: 'inc:' },
+
+  // update:
+  { address: 0x0D, hex: '0xBBA0', label: 'OUT PORTF, R20', instr: { op: 'OUT', port: 'PORTF', rr: 20 }, loopLabel: 'update:' },
+
+  // Test bit 1 — if SET (button NOT pressed) jump back to main
+  { address: 0x0E, hex: '0xFD21', label: 'SBRC R18, 1',   instr: { op: 'SBRC', rr: 18, bit: 1 } },
+  { address: 0x0F, hex: '0xCFF6', label: 'RJMP main',      instr: { op: 'RJMP', target: 0x06 } },
+  { address: 0x10, hex: '0xCFF4', label: 'RJMP reset',     instr: { op: 'RJMP', target: 0x05 } },
+];

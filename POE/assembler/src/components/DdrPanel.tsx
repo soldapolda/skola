@@ -1,19 +1,23 @@
 interface Props {
-  portF:    string;
-  active?:  boolean;
+  id:     string;   // DOM id for connection routing
+  name:   string;   // e.g. 'DDRF' or 'DDRK'
+  value:  number;   // 0–255
+  active?: boolean;
   stepKey?: number;
 }
 
-export default function PortPanel({ portF, active, stepKey }: Props) {
-  const value = parseInt(portF, 16) || 0;
+function toHex(n: number): string {
+  return `0x${n.toString(16).padStart(2, '0').toUpperCase()}`;
+}
 
+export default function DdrPanel({ id, name, value, active, stepKey }: Props) {
   return (
     <div
-      id="portf-panel"
+      id={id}
       className="rounded-[0.5vw] shadow-xl"
       style={{
         backgroundColor: '#c48e8e',
-        border: active ? '2px solid #ef4444' : '2px solid #8d6e63',
+        border: active ? '2px solid #3b82f6' : '2px solid #8d6e63',
         padding: '0.2vw',
         transition: 'border-color 0.3s',
         alignSelf: 'flex-start',
@@ -23,7 +27,7 @@ export default function PortPanel({ portF, active, stepKey }: Props) {
         className="rounded-[0.3vw] overflow-hidden"
         style={{ backgroundColor: '#1e293b', border: '2px solid #000' }}
       >
-        {/* Title row: PORTF + hex value */}
+        {/* Title row */}
         <div
           className="flex items-center justify-between text-white font-black uppercase"
           style={{
@@ -32,45 +36,50 @@ export default function PortPanel({ portF, active, stepKey }: Props) {
             backgroundColor: 'rgba(0,0,0,0.6)',
           }}
         >
-          <span>PORTF</span>
+          <span>{name}</span>
           <span
-            key={active ? `portf-hex-${stepKey}` : 'portf-hex'}
+            key={active ? `${id}-hex-${stepKey}` : `${id}-hex`}
             className="font-mono"
             style={{
-              color: '#fbbf24',
+              color: '#93c5fd',
               animation: active ? 'dataReceive 0.75s ease-out forwards' : undefined,
             }}
           >
-            {portF}
+            {toHex(value)}
           </span>
         </div>
 
-        {/* LEDs */}
+        {/* Direction bit indicators */}
         <div
-          key={active ? `portf-active-${stepKey}` : 'portf'}
           style={{
             display: 'flex',
             justifyContent: 'center',
             gap: '0.55vw',
             padding: '0.35vh 0.6vw 0.3vh',
-            animation: active ? 'dataReceive 0.75s ease-out forwards' : undefined,
           }}
         >
           {[7, 6, 5, 4, 3, 2, 1, 0].map((bit) => {
-            const lit = !((value >> bit) & 1); // active-low: bit=0 → LED on
+            const isOutput = Boolean((value >> bit) & 1);
             return (
               <div key={bit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.1vh' }}>
                 <div
                   style={{
                     width: '1.2vw',
                     height: '1.2vw',
-                    borderRadius: '50%',
-                    backgroundColor: lit ? '#fbbf24' : '#374151',
-                    border: lit ? '1px solid #f59e0b' : '1px solid #64748b',
-                    boxShadow: lit ? '0 0 5px 2px rgba(251,191,36,0.7)' : 'none',
+                    borderRadius: '0.2vw',
+                    backgroundColor: isOutput ? '#3b82f6' : '#374151',
+                    border: isOutput ? '1px solid #2563eb' : '1px solid #64748b',
+                    boxShadow: isOutput ? '0 0 4px 1px rgba(59,130,246,0.6)' : 'none',
                     transition: 'background-color 0.3s, box-shadow 0.3s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
-                />
+                >
+                  <span style={{ fontSize: '0.5vw', color: '#fff', fontFamily: 'monospace', fontWeight: 700 }}>
+                    {isOutput ? 'O' : 'I'}
+                  </span>
+                </div>
                 <span style={{ fontSize: '0.55vw', color: '#94a3b8', fontFamily: 'monospace' }}>
                   {bit}
                 </span>
