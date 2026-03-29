@@ -66,24 +66,26 @@ export default function Ram({ flash, activeAddress }: Props) {
                     transition: 'background-color 0.3s',
                   }}
                 >
-                  <span
+                  <div
                     className="font-mono font-black"
                     style={{
                       color: active ? '#7c3aed' : '#fbbf24',
-                      fontSize: '1vw',
+                      fontSize: '1.2vw',
+                      paddingLeft: '0.4vw',
+                      textAlign: 'left',
                       alignSelf: 'center',
                     }}
                   >
                     {word.loopLabel ?? ''}
-                  </span>
+                  </div>
                   <span
                     className="font-bold"
                     style={{ fontFamily: "'Segoe UI', sans-serif", textAlign: 'left', paddingLeft: '0.4vw' }}
-                  >
+                >
                     {word.label}
                     {secondWord && (
                       <span style={{ fontSize: '0.8em', color: active ? '#7c3aed' : '#c4b5fd', marginLeft: '0.4em' }}>
-                        (32b)
+                        
                       </span>
                     )}
                   </span>
