@@ -3,14 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://soldapolda.github.io/skola/POE/assembler-sim",
+  "homepage": "https://soldapolda.github.io/skola/POE/assembler",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --dest POE/assembler-sim"
+    "deploy": "gh-pages -d dist --dest POE/assembler"
   },
   "dependencies": {
     "react": "^19.2.4",
