@@ -4,4 +4,5 @@ zápisy ze školy
 ---
 
 ## 🚀 Projekty
-* **[CPU Simulator (POE)](https://soldapolda.github.io/skola/POE/cpu-sim/)** - Interaktivní simulátor procesoru.
+* **[CPU Instruction cyclus (POE)](https://soldapolda.github.io/skola/POE/cpu-sim/)** - Simulace procesu spracování instukce.
+* **[Assemler (POE)](https://soldapolda.github.io/skola/POE/cpu-sim/)** - Simulátor procesoru ATMega 2560.
