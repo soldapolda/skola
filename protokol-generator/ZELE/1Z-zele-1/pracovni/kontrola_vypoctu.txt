@@ -1,0 +1,16 @@
+Kontrolní mezivýsledky – průběžné zaokrouhlování na 3 desetinná místa
+RvA = 2,433 mΩ
+RA = 75,433 mΩ = 0,075433 Ω
+RvB = 4,877 mΩ
+RB = 58,877 mΩ = 0,058877 Ω
+US = 5,149 V
+IA = 31,167 A
+IB = 124,854 A
+IS = 156,030 A
+PS = 803,398 W
+ΔPA = 73,274 W
+ΔPB = 917,805 W
+ΔP = 991,079 W
+η = 44,771 %
+Příkon zdrojů = 1794,428 W
+Bilanční rozdíl po průběžném zaokrouhlení = 0,049 W

@@ -1,0 +1,13 @@
+Kontrola výpočtu ZELE 4Z
+Průběžně zaokrouhlené hodnoty:
+R = 56,000 Ω; L = 77,000 mH = 0,077 H; I = 0,194 A
+UR = 10,864 V; UL = 33,271 V; XL = 171,500 Ω
+f = 354,481 Hz; φ = 71,917°
+
+Kontrola z plné přesnosti:
+I = 0,193649167 A; UR = 10,844353370 V; UL = 33,277620107 V
+XL = 171,844891314 Ω; f = 355,194336348 Hz; φ = 71,950491872°
+
+Kontrola výkonu ze zobrazeného proudu:
+P = 0,194² · 56 = 2,108 W
+Rozdíl = 0,008 W = 0,363 %; příčinou je schválené průběžné zaokrouhlování.

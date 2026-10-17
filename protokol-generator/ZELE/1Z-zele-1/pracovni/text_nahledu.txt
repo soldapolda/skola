@@ -1,0 +1,129 @@
+                                  Jméno: Vojtěch Solanský          Podpis:
+        GYMNÁZIUM
+  a STŘEDNÍ PRŮMYSLOVÁ
+ ŠKOLA ELEKTROTECHNIKY
+      A INFORMATIKY
+       FRENŠTÁT p. R.
+Název měření:
+                SEMESTRÁLNÍ PROJEKT ZELE 1Z                        Třída: T4A    Skupina: 3
+                                                                          Číslo měření: 1Z
+
+Zkoušené předměty:
+          Stejnosměrná zátěž napájená ze dvou reálných zdrojů      Změřeno dne: 9. 9. 2025
+
+                                                                   Vyučující: Vladimír Kokeš
+Funkce při měření: Zapojující, Měřič      Spoluměřící: -
+
+Schéma:
+
+
+
+
+                         U iA =7,5V   RiA =73 mΩ l A =0,82 m S A =6 mm ²
+                         U iB =12,5 V  RiB =54 mΩ l B =2 m S B=7,3 mm ²
+                             U n =12V  R S=33 mΩ ρCu =17,8 ·10 ⁻⁹ Ω·m
+
+
+
+
+                                                                  Známka:
+Poznámky učitele:
+
+
+
+                                                                  Datum:
+ÚVOD:
+     Předmětem projektu je teoretické posouzení napájení stejnosměrné zátěže ze dvou
+reálných stejnosměrných zdrojů A a B. Zdroje mají rozdílná vnitřní napětí a vnitřní odpory.
+Propojovací měděné vodiče mají nezanedbatelný odpor, a proto způsobují další úbytek napětí
+a výkonové ztráty. Zátěž je pro účely výpočtu uvažována jako ideální lineární rezistor. Situace
+odpovídá například napájení startéru z jedné nebo ze dvou autobaterií pomocí startovacích
+kabelů.
+
+ZADÁNÍ:
+    Stejnosměrná zátěž je napájena ze dvou reálných stejnosměrných zdrojů A a B. Odpory
+měděných vodičů se vypočítají z jejich délky, průřezu a měrného elektrického odporu mědi.
+Jmenovitý odpor lineární zátěže lze obecně určit ze jmenovitého napětí a výkonu; v tomto
+individuálním zadání je však hodnota odporu zátěže zadána přímo.
+                                     2
+                                 U
+                               R= ; pro výpočet RS =33 mΩ
+                                 Pn
+    Vypočítá se napětí na zátěži Uₛ, výkon na zátěži Pₛ, celkové výkonové ztráty ΔP na všech
+parazitních odporech a účinnost přenosu výkonu η.
+
+NÁHRADNÍ SCHÉMA:
+    Pro výpočet jsou odpory vnitřního odporu zdroje a přívodního vodiče v každé větvi
+sloučeny do výsledných odporů Rₐ a Rᵦ.
+VÝPOČTY:
+    V souladu se zadáním se každý mezivýsledek zaokrouhluje na tři desetinná místa a
+zaokrouhlená hodnota se používá v následujícím kroku. Malé odpory jsou proto
+zaokrouhlovány v mΩ a před dosazením převedeny na Ω.
+Převod průřezů vodičů do jednotek SI:
+                             2              −6   2                 2        −6   2
+               S A =6 mm❑ =6 · 10❑ m❑ ; S B=7,3 mm❑ =7,3 · 10❑ m❑
+Odpor měděného vodiče ve větvi A:
+                                    lA           −9     0,82
+                        R vA= ρCu      =17,8· 10❑ ·             =2,433 mΩ
+                                    SA              6 · 10❑
+                                                             −6
+
+
+                    R A =RiA + R vA =73,000+2,433=75,433 mΩ=0,075 Ω
+Odpor měděného vodiče ve větvi B:
+                                    lB           −9       2
+                        R vB= ρCu      =17,8· 10❑ ·              =4,877 mΩ
+                                    SB              7,3 ·10 ❑− 6
+                    R B=RiB + R vB=54,000+ 4,877=58,877 mΩ=0,059 Ω
+    Napětí na zátěži se určí metodou uzlových napětí. Proudy obou zdrojových větví směřují
+do společného uzlu a jejich součet se rovná proudu zátěží:
+                                       U iA − U S U iB − U S U S
+                                                 +          =
+                                           RA         RB      RS
+                                            U iA U iB
+                                                +
+                                            R A RB
+                                     U S=             =5,149 V
+                                           1 1 1
+                                             + +
+                                          R A R B RS
+Proudy jednotlivými větvemi a zátěží:
+                                    U iA −U S 7,500 − 5,149
+                             I A=            =              =31,167 A
+                                        RA        0,075
+                                  U iB −U S 12,500 −5,149
+                           I B=            =              =124,854 A
+                                      RB        0,059
+                                            U S 5,149
+                                     I S=      =      =156,030 A
+                                            R S 0,033
+Výkon na zátěži:
+                             PS =U S · I S=5,149 · 156,030=803,398 W
+     Ztráty ve větvích zahrnují vždy součet ztrát na vnitřním odporu zdroje a na odporu
+příslušného vodiče:
+                                      2               2
+                           Δ P A =I A · R A =31,167❑ ·0,075=73,274 W
+                          Δ P B=I B2 · R B=124,854 ❑2 · 0,059=917,805W
+                         ΔP= Δ P A + Δ P B=73,274+ 917,805=991,079W
+Účinnost přenosu výkonu:
+                           PS                 803,398
+                   η=            ·100 %=                 ·100 %=44,771%
+                        P S + ΔP         803,398+991,079
+    Kontrolní vstupní výkon zdrojů je 1794,428 W. Součet výkonu zátěže a ztrát je 1794,477
+W; rozdíl 0,049 W vzniká výhradně schváleným průběžným zaokrouhlováním mezivýsledků.
+
+ZHODNOCENÍ:
+    Výpočtem bylo stanoveno napětí na zátěži Uₛ = 5,149 V, které je výrazně nižší než její
+jmenovité napětí 12 V. Příčinou je velmi malý odpor zátěže a s ním spojené velké proudy,
+které vyvolávají značné úbytky napětí na vnitřních odporech zdrojů a na odporech přívodních
+vodičů.
+     Zdroj B dodává proud Iᵦ = 124,854 A, zatímco zdroj A dodává pouze Iₐ = 31,167 A.
+Zdroj B se tedy na napájení zátěže podílí podstatně více, protože má vyšší vnitřní napětí a
+zároveň nižší výsledný odpor větve. Tomu odpovídá také dominantní ztráta ve větvi B, která
+činí 917,805 W.
+     Na zátěži se přenáší výkon Pₛ = 803,398 W, zatímco celkové ztráty dosahují ΔP =
+991,079 W. Výsledná účinnost přenosu je pouze η = 44,771 %. Výpočet ukazuje, že u
+nízkoohmové zátěže mají i odpory v řádu desítek miliohmů zásadní vliv na provozní napětí,
+ztrátový výkon a účinnost. Uvedené závěry vycházejí z teoretického modelu; obvod nebyl v
+rámci tohoto projektu experimentálně měřen.
+

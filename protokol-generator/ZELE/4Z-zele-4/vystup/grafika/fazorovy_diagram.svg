@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="700" viewBox="0 0 1800 700">
+<defs>
+<marker id="green" markerWidth="13" markerHeight="13" refX="11" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z" fill="#2F6B3B"/></marker>
+<marker id="red" markerWidth="13" markerHeight="13" refX="11" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z" fill="#C00000"/></marker>
+<marker id="blue" markerWidth="13" markerHeight="13" refX="11" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z" fill="#1F4E79"/></marker>
+<marker id="black" markerWidth="13" markerHeight="13" refX="11" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z"/></marker>
+</defs>
+<rect width="1800" height="700" fill="white"/>
+<line x1="330.00" y1="620.00" x2="1120" y2="620.00" stroke="#777" stroke-width="3"/>
+<line x1="370.00" y1="620.00" x2="538.39" y2="620.00" stroke="#2F6B3B" stroke-width="8" marker-end="url(#green)"/>
+<line x1="538.39" y1="620.00" x2="538.39" y2="104.30" stroke="#C00000" stroke-width="8" marker-end="url(#red)"/>
+<line x1="370.00" y1="620.00" x2="538.39" y2="104.30" stroke="#1F4E79" stroke-width="8" marker-end="url(#blue)"/>
+<line x1="720" y1="592.00" x2="1040" y2="592.00" stroke="black" stroke-width="5" marker-end="url(#black)"/>
+<path d="M480.00 620.00 A110 110 0 0 0 404.14 515.43" fill="none" stroke="black" stroke-width="4"/>
+<circle cx="370.00" cy="620.00" r="8"/>
+<g font-family="Times New Roman,serif" font-style="italic" font-size="44"><text x="425" y="555">φ = 71,917°</text><text x="390" y="680" fill="#2F6B3B">U<tspan baseline-shift="sub" font-size="28">R</tspan> = 10,864 V</text><text x="563.39" y="300" fill="#C00000">U<tspan baseline-shift="sub" font-size="28">L</tspan> = 33,271 V</text><text x="230" y="285" fill="#1F4E79">U = 35,000 V</text><text x="790" y="565">I (referenční směr)</text></g>
+<g font-family="Times New Roman,serif" font-size="38"><text x="1180" y="150">Napěťový trojúhelník</text><text x="1180" y="220">U<tspan baseline-shift="sub" font-size="25">R</tspan> je ve směru I</text><text x="1180" y="290">U<tspan baseline-shift="sub" font-size="25">L</tspan> je kolmé na I</text></g>
+</svg>

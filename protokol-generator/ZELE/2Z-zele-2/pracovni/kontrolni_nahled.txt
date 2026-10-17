@@ -1,0 +1,153 @@
+                                    Jméno: Vojtěch Solanský        Podpis:
+        GYMNÁZIUM
+  a STŘEDNÍ PRŮMYSLOVÁ
+ ŠKOLA ELEKTROTECHNIKY
+      A INFORMATIKY
+       FRENŠTÁT p. R.
+Název měření:
+                SEMESTRÁLNÍ PROJEKT ZELE 2Z                        Třída: T4A    Skupina: 3
+                                                                          Číslo měření: 2Z
+
+Zkoušené předměty:
+                     Střídavý rozvod jištěný jističem              Změřeno dne: 9. 9. 2025
+
+                                                                   Vyučující: Vladimír Kokeš
+Funkce při měření: Zapojující, Měřič        Spoluměřící: -
+
+Schéma:
+
+
+
+
+U =230V                  f =50 Hz                       I n=16 A      char . B
+P1=2300 W                cos φ1=1                       P2=220 W      cos φ2=0,63
+P3=7000 W                cos φ3=0,74
+
+                                                                   Známka:
+Poznámky učitele:
+
+
+
+                                                                   Datum:
+ZADÁNÍ:
+   Střídavý rozvod je napájen zdrojem konstantního střídavého napětí 230 V o frekvenci 50
+Hz. Jedná se o idealizovaný případ zásuvkového rozvodu v obytné budově.
+    Rozvod je jištěn jističem se jmenovitým proudem 16 A a vypínací charakteristikou B. K
+rozvodu jsou paralelně připojeny tři spotřebiče se zadanými činnými výkony a účiníky.
+   Úkolem je vypočítat proud protékající jističem, zjistit, zda jistič vypne, a v případě vypnutí
+určit z dodané charakteristiky minimální a maximální vypínací čas.
+
+Zadané hodnoty:
+U =230V     f =50 Hz    I n=16 A      char . B
+U n 1=230 V   P1=2300 W      cos φ1=1
+U n 2=230 V   P2=220 W      cos φ2=0,63
+U n 3=230V    P3=7000 W      cos φ3=0,74
+
+NÁHRADNÍ SCHÉMA:
+    Všechny tři spotřebiče jsou paralelně připojeny k ideálnímu zdroji napětí. Spotřebič 1 má
+jednotkový účiník. Spotřebiče 2 a 3 jsou induktivní zátěže, a proto se celkový proud musí
+určit fázorovým součtem.
+VÝPOČTY:
+
+      Při výpočtu proudu jednotlivých spotřebičů se vychází ze vztahu pro činný výkon
+střídavého jednofázového spotřebiče:
+
+P=U · I · cos φ
+  Z tohoto vztahu se vyjádří proud:
+       P
+I=
+   U · cos φ
+    Napětí se zvolí jako referenční fázor. Induktivní proudy zaostávají za napětím a mají
+záporný fázový úhel i zápornou imaginární část. Každý zobrazený mezivýsledek se
+zaokrouhlí na tři desetinná místa a použije v následujícím kroku.
+
+U =230∠ 0 ° V
+Spotřebič 1:
+           P1         2300
+I 1=              I =
+       U · cos φ 1 1 230 ·1
+I 1=10,000 A
+
+φ 1=arccos(cos φ1)φ1 =arccos(1)
+φ 1=0,000 °
+
+I 1=I 1 (cos φ1 − j· sin φ1)
+I 1=10,000(cos 0,000° − j·sin 0,000° )
+I 1=10,000+ j 0,000 A
+Spotřebič 2:
+           P2             220
+I 2=               I2 =
+       U · cos φ 2      230 · 0,63
+I 2=1,518 A
+
+φ 2=arccos(cos φ2)φ 2=arccos(0,63)
+φ 2=50,950°
+
+I 2=I 2( cos φ2 − j· sin φ2 )
+I 2=1,518(cos 50,950 ° − j·sin50,950 ° )
+I 2=0,956 − j1,179 A
+Spotřebič 3:
+           P3            7000
+I 3=              I3 =
+       U · cos φ3      230 · 0,74
+I 3=41,128 A
+
+φ 3=arccos(cos φ3 )φ 3=arccos(0,74 )
+φ 3=42,269 °
+
+I 3=I 3 (cos φ 3 − j· sin φ3 )
+I 3=41,128 (cos 42,269 ° − j·sin 42,269° )
+I 3=30,435 − j27,663 A
+Celkový proud jističem:
+
+I =I 1+ I 2 + I 3
+
+I =(10,000+ j 0,000)+(0,956 − j1,179)+(30,435− j 27,663)
+I =41,391− j28,842 A
+I =|I | I =√ 41,391 +(− 28,842)
+                    2          2
+
+
+I =50,449 A
+φ I =atan2(ℑ I ; ℜ I ) φ I =atan 2(−28,842 ;41,391)
+φ I =− 34,869 °
+I =50,449 ∠− 34,869° A
+Fázorový diagram proudů:
+      Proudy I₁, I₂, I₃ a jejich výslednice I jsou zakresleny od společného počátku vůči
+referenčnímu napětí. Diagram nepoužívá samostatně označené osové složky.
+
+
+
+
+Posouzení jističe:
+
+I =50,449 A I n =16 A
+ I I 50,449
+      =
+In In    16
+ I
+   =3,153
+In
+   Proud jističem je 3,153násobkem jeho jmenovitého proudu. Jistič B16 proto vypne.
+VYPÍNACÍ CHARAKTERISTIKA JISTIČE:
+Velikost nadproudu: 3,153
+
+                                 t min ≈ 6 s t max ≈ 21 s
+      Časy jsou přibližně odečteny z tolerančního pásma charakteristiky B pro velikost
+nadproudu 3,153.
+ZHODNOCENÍ:
+    Výpočtem byly stanoveny proudy jednotlivých spotřebičů. Spotřebičem 1 protéká proud
+10,000 A, spotřebičem 2 proud 1,518 A a spotřebičem 3 proud 41,128 A. Protože mají
+spotřebiče rozdílné účiníky a fázové posuny, nebyly velikosti proudů aritmeticky sečteny.
+      Jednotlivé proudy byly převedeny na komplexní fázory. Jejich součtem byl získán
+výsledný proud 41,391 − j28,842 A, tedy 50,449∠−34,869° A. Jmenovitý proud jističe je 16
+A, takže vypočtený proud představuje 3,153násobek jeho jmenovité hodnoty.
+    Jistič s charakteristikou B při tomto zatížení vypne. Z dodané vypínací charakteristiky byl
+odečten minimální čas přibližně 6 s a maximální čas přibližně 21 s. Při nadproudu 3,153
+prochází konstrukční svislice tepelnou částí tolerančního pásma B, nikoli jeho okamžitou
+elektromagnetickou oblastí.
+   Výpočet popisuje ustálený teoretický stav při konstantním napětí 230 V. Neuvažuje úbytky
+napětí na vedení ani rozběhové proudy motorů, protože tyto hodnoty nebyly zadány. Skutečný
+okamžik vypnutí by dále ovlivnila počáteční teplota jističe, výrobní tolerance a předchozí
+zatížení.
+

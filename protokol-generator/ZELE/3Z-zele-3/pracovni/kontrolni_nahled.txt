@@ -1,0 +1,118 @@
+                                  Jméno: Vojtěch Solanský       Podpis:
+         GYMNÁZIUM
+   a STŘEDNÍ PRŮMYSLOVÁ
+  ŠKOLA ELEKTROTECHNIKY
+       A INFORMATIKY
+        FRENŠTÁT p. R.
+Název měření:
+                 SEMESTRÁLNÍ PROJEKT ZELE 3Z                    Třída: T4A    Skupina: 3
+                                                                       Číslo měření: 3Z
+
+Zkoušené předměty:
+                     Trojfázový asynchronní motor               Změřeno dne: 9. 9. 2025
+
+                                                                Vyučující: Vladimír Kokeš
+Funkce při měření: Zapojující, Měřič     Spoluměřící: -
+
+Schéma:
+
+
+
+
+U n =400 V                       f n=50 Hz                  2 p=2
+Pn=7200 W                        nn =2951 min⁻¹             I n=13 A
+cos (φ n)=0,88                   Mz                         Iz
+                                     =2,1                      =9
+                                 Mn                         In
+
+
+
+
+                                                               Známka:
+Poznámky učitele:
+
+
+
+                                                               Datum:
+ZADÁNÍ:
+   Trojfázový asynchronní motor pracuje při jmenovitém napětí Uₙ a jmenovité frekvenci fₙ.
+Ze zadaných štítkových a katalogových údajů určete synchronní otáčky nₛ, otáčky při zatížení
+polovinou jmenovitého momentu nₓ, jmenovitý moment, záběrný proud, záběrný moment a
+jmenovitou účinnost.
+   Přiložená momentová charakteristika je pouze orientační. Hodnoty z ní nelze odměřovat;
+pro výpočet otáček při polovičním momentu se použije přibližně lineární pracovní oblast
+motoru.
+
+Zadané hodnoty:
+U n =400 V     f n=50 Hz      2 p=2
+Pn=7200 W        nn =2951 min⁻¹      I n=13 A
+                    Mz           Iz
+cos (φ n)=0,88         =2,1         =9
+                    Mn           In
+MOMENTOVÁ CHARAKTERISTIKA:
+    Náčrtek zachycuje obecný tvar momentové charakteristiky asynchronního motoru. Je
+pouze orientační a slouží k vymezení přibližně lineární běžné pracovní oblasti; žádná číselná
+hodnota se z něj neodečítá.
+VÝPOČTY:
+
+   Všechny zobrazené mezivýsledky se zaokrouhlují na tři desetinná místa a v této podobě se
+použijí v následujícím kroku.
+Počet pólových dvojic:
+     2p    2
+p=      p=
+      2    2
+p=1
+Synchronní otáčky motoru:
+       60 · f n      60 ·50
+n S=            n S=
+         p             1
+n S=3000,000 min ⁻¹
+Jmenovitá účinnost motoru:
+                  Pn                                   7200
+ηn =                                ·100 η n=                       · 100
+       √ 3 ·U n · I n · cos( φn )               √3 · 400 ·13 · 0,88
+ηn =90,842 %
+Záběrný proud motoru:
+          I
+I z =I n · z I z=13· 9
+          In
+I z =117,000 A
+Jmenovitý moment motoru:
+            Pn         Pn ·60
+M n=               =
+           nn          2 · π· nn
+        2· π·
+          60
+     7200· 60
+M n=
+     2· π·2951
+M n=23,299 N·m
+Záběrný moment motoru:
+                Mz
+M z =M n ·         M =23,299 · 2,1
+                Mn z
+M z =48,928 N·m
+Otáčky při polovině jmenovitého momentu:
+    V běžné pracovní oblasti je pokles otáček oproti synchronním otáčkám přibližně úměrný
+zatěžovacímu momentu.
+nS − n X nS − nn
+        =
+  MX       Mn
+   Protože Mₓ = 0,5Mₙ, je poměr Mₓ/Mₙ přesně 0,5.
+
+n X =n S −0,5(nS −n n)n X =3000 −0,5( 3000− 2951)
+n X =2975,500 min ⁻¹
+ZHODNOCENÍ:
+       Dvoupólovému asynchronnímu motoru napájenému frekvencí 50 Hz odpovídají
+synchronní otáčky nₛ = 3000,000 min⁻¹. Jmenovité otáčky 2951 min⁻¹ jsou nižší, protože
+motor při zatížení pracuje se skluzem.
+      Při zatížení polovinou jmenovitého momentu vycházejí z lineární aproximace běžné
+pracovní oblasti otáčky nₓ = 2975,500 min⁻¹. Tato hodnota nebyla odečtena z orientačního
+náčrtku momentové charakteristiky.
+       Jmenovitý moment motoru je Mₙ = 23,299 N·m. Záběrný proud 117,000 A je
+devítinásobkem jmenovitého proudu a záběrný moment 48,928 N·m je 2,1násobkem
+jmenovitého momentu. Jmenovitá účinnost vychází ηₙ = 90,842 %.
+    Výsledky popisují idealizovaný teoretický výpočet z jmenovitých a katalogových údajů.
+Nebyly experimentálně ověřeny a nezohledňují toleranci parametrů, změnu napájecího napětí,
+zahřívání ani nelinearity skutečné momentové charakteristiky mimo běžnou pracovní oblast.
+

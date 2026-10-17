@@ -1,0 +1,91 @@
+# PENETRATION TEST REPORT
+## TryHackMe PT1 Certification Examination
+## General Assessment Summary
+
+Target: 10.200.150.100
+Assessment Date: 4 March 2026
+Application Stack: nginx 1.24.0 (frontend) / Werkzeug Python 3.12.3 (API)
+Ports in Scope: 80/tcp (HTTP), 8080/tcp (API)
+Total Findings: 4 Critical
+Classification: CONFIDENTIAL
+
+---
+
+# 1. Overview
+
+A web application penetration test was conducted against a banking application hosted at 10.200.150.100 as part of the TryHackMe PT1 Certification examination. The application is a full-stack financial platform offering account management, card services, loan applications, vault storage, and fund transfers. The frontend is served by nginx on port 80, while the REST API backend runs on port 8080 using the Werkzeug/Python framework.
+
+The assessment began with infrastructure reconnaissance using Nmap, followed by API enumeration using ffuf and gobuster. Three test user accounts were registered and used throughout to simulate realistic attacker behaviour from the perspective of a low-privilege authenticated user. Every discovered endpoint was then methodically tested for SQL Injection, Mass Assignment, IDOR, and XSS vulnerabilities.
+
+Tools used:
+- Nmap — port scanning and service version detection
+- ffuf — username enumeration via the registration endpoint
+- gobuster — API directory brute-forcing to enumerate all available routes
+- Burp Suite — HTTP interception, request modification, and manual exploitation
+- sqlmap — automated SQL injection confirmation and database dumping
+- curl — manual API interaction and JavaScript bundle analysis
+
+Four critical vulnerabilities were successfully exploited and verified with flags.
+
+---
+
+# 2. Scope
+
+The assessment covered all functionality accessible via the web frontend at http://10.200.150.100 and the REST API at http://10.200.150.100:8080/api/v1.0/. All endpoints listed below were tested. A blank cell means the test was performed and no vulnerability was found.
+
+## Endpoint Testing Results
+
+Endpoint                  | IDOR | SQL Injection | Mass Assignment | Notes
+POST /user (register)     |      | Vulnerable    |                 | SQL Injection — Flag #4
+POST /auth (login)        |      |               |                 |
+GET / PUT /user           |      |               | Vulnerable      | role escalation — Flag #3
+GET / POST /account       |      |               |                 |
+GET / POST /card          |      |               |                 | PUT /card returns 200 but no effect
+GET / POST /loan          |      |               |                 | Stored XSS — Flag #2
+GET / POST /vault         |      |               |                 | Base64 storage, no encryption
+POST /transaction         |      |               |                 | Negative amount injection — Flag #1
+
+## Additional Observations
+
+Vault file storage with no encryption. Uploaded files are stored as Base64. Base64 is an encoding scheme, not encryption — anyone with access to the raw data via IDOR or a database breach can decode any file instantly. No file type validation is enforced either.
+
+PUT /api/v1.0/card ambiguity. Submitting another user's card number returns HTTP 200 with "Card updated", but no changes are visible in the card details. The misleading success response is a security design issue regardless of whether the update is silently discarded.
+
+---
+
+# 3. Impact
+
+Four critical vulnerabilities were identified and exploited. The combination of flaws across multiple endpoints means a single low-privilege attacker can fully compromise the platform.
+
+## Critical Findings
+
+Flag   | CVSS | Finding                                                    | Endpoint
+Flag 1 | 9.1  | Negative Integer Injection — Unauthorized Fund Theft       | POST /api/v1.0/transaction
+Flag 2 | 9.3  | Stored XSS — Admin Session Hijacking                       | POST /api/v1.0/loan
+Flag 3 | 9.8  | Mass Assignment — Privilege Escalation via role field      | PUT /api/v1.0/user
+Flag 4 | 9.8  | SQL Injection — Full Database Extraction via EXTRACTVALUE  | POST /api/v1.0/user
+
+Beyond the four confirmed findings, a motivated attacker could additionally:
+- Access and modify any other user's account, card, loan, or vault data through IDOR vulnerabilities confirmed across multiple endpoints.
+- Dump the entire Users table via sqlmap — extracting all usernames, password hashes, and email addresses in a single automated run.
+- Inject an elevated role during account registration via Mass Assignment, immediately creating an admin account without any administrator interaction.
+- Retrieve any user's vault files in plaintext by decoding Base64 — no decryption key required.
+
+The overall security posture of the application is critically insufficient for a financial platform. There is no meaningful server-side input validation, no field-level access control on the API, and no protection against well-known attack classes on any endpoint.
+
+---
+
+# 4. Conclusion
+
+This assessment identified four critical vulnerabilities across the application. All four flags were captured and verified, demonstrating real-world exploitability of business logic flaws, stored XSS, mass assignment privilege escalation, and SQL injection. The assessment additionally uncovered IDOR and insecure file storage across the remaining endpoints.
+
+The root cause is consistent throughout: the API trusts all user-supplied input without validation, allowlisting, or access control at the field level.
+
+Remediation priorities in order of urgency:
+
+1. Immediate — Patch the four confirmed critical vulnerabilities: negative transaction amounts, stored XSS in loan purpose, role escalation via PUT /user, and SQL injection in the registration endpoint.
+2. Short-term — Implement server-side input validation and strict field allowlisting on all API endpoints. Use prepared statements throughout. Migrate auth tokens from localStorage to HttpOnly cookies.
+3. Medium-term — Enforce ownership checks on all resource-level endpoints to eliminate IDOR. Conduct a full SQL injection audit across all remaining parameterised inputs.
+4. Long-term — Replace Base64 vault storage with authenticated encryption. Introduce automated security testing in CI/CD and a mandatory code review process for all API changes.
+
+Given the financial nature of the application and the severity of the findings, it is strongly recommended that the application is taken offline or placed behind an authenticated gateway until the critical vulnerabilities are resolved.

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs><marker id="arr" markerWidth="14" markerHeight="14" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="context-stroke"/></marker></defs>
+<rect width="1600" height="1000" fill="white"/>
+<line x1="190" y1="170" x2="1470" y2="170" stroke="#777" stroke-width="3" stroke-dasharray="18 17" marker-end="url(#arr)"/>
+<text x="1360" y="120" font-family="Times New Roman,serif" font-size="40" font-style="italic">U = U∠0°</text>
+<line x1="190" y1="170" x2="426.20" y2="170.00" stroke="#222222" stroke-width="4" marker-end="url(#arr)"/>
+<line x1="190" y1="170" x2="908.86" y2="823.40" stroke="#555555" stroke-width="5" marker-end="url(#arr)"/>
+<line x1="190" y1="170" x2="1167.67" y2="851.24" stroke="#000000" stroke-width="9" marker-end="url(#arr)"/>
+<line x1="190" y1="170" x2="212.59" y2="197.84" stroke="#555555" stroke-width="6" marker-end="url(#arr)"/>
+<text x="410" y="143" font-family="Times New Roman,serif" font-size="38" font-style="italic">I₁ = 10,000 A</text>
+<text x="830" y="888" font-family="Times New Roman,serif" font-size="38" font-style="italic">I₃ = 41,128 A</text>
+<text x="1180" y="728" font-family="Times New Roman,serif" font-size="38" font-style="italic">I = 50,449 A</text>
+<text x="285" y="308" font-family="Times New Roman,serif" font-size="38" font-style="italic">I₂ = 1,518 A</text>
+<line x1="217.59" y1="201.84" x2="285" y2="264" stroke="#555" stroke-width="2"/>
+<text x="1120" y="940" font-family="Times New Roman,serif" font-size="32">měřítko: 2 mm ≙ 1 A</text>
+</svg>

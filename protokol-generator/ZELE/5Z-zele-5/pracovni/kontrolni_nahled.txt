@@ -1,0 +1,148 @@
+                                  Jméno: Vojtěch Solanský      Podpis:
+         GYMNÁZIUM
+   a STŘEDNÍ PRŮMYSLOVÁ
+  ŠKOLA ELEKTROTECHNIKY
+       A INFORMATIKY
+        FRENŠTÁT p. R.
+Název měření:
+                SEMESTRÁLNÍ PROJEKT ZELE 5Z                    Třída: T4A    Skupina: 3
+                                                                      Číslo měření: 5Z
+
+Zkoušené předměty:
+                Kompenzace účiníku zářivkového svítidla        Změřeno dne: 9. 9. 2025
+
+                                                               Vyučující: Vladimír Kokeš
+Funkce při měření: Zapojující, Měřič      Spoluměřící: -
+
+Schéma:
+
+
+
+
+U =230V                          f =50 Hz                   P=30 W
+cos φ=0,31                       cos φ′=0,95
+
+
+
+                                                              Známka:
+Poznámky učitele:
+
+
+
+                                                              Datum:
+ZADÁNÍ:
+       Klasické zářivkové svítidlo je tvořeno zářivkovou trubicí, tlumivkou a startérem.
+Zářivková trubice spolu s tlumivkou se v ustáleném stavu chová jako odporově-induktivní
+zátěž. Parazitní vlastnosti a nelinearity se v teoretickém modelu zanedbávají. Startér sepne
+pouze na okamžik při zapnutí a při běžném svícení je rozepnutý.
+   Kompenzační kondenzátor není pro samotnou funkci svítidla nezbytný. Jeho úlohou je
+zmenšit induktivní jalový odběr svítidla, a tím zvýšit jeho účiník na zadanou hodnotu.
+      Určete kapacitu kompenzačního kondenzátoru Cₖ, jeho napěťové dimenzování, proud
+svítidla bez kompenzace I a proud svítidla po kompenzaci I′.
+
+Zadané hodnoty:
+U =230V    f =50 Hz      P=30 W
+cos φ=0,31   cos φ′=0,95
+NÁHRADNÍ SCHÉMA:
+      Zářivková trubice s tlumivkou je nahrazena sériovou odporově-induktivní větví R–Xʟ.
+Kondenzátor Cₖ je připojen paralelně k celému svítidlu. Pro proudy platí fázorový vztah Ī′ = Ī
++ Īᴄ.
+VÝPOČTY:
+
+   Všechny zobrazené mezivýsledky se zaokrouhlují na tři desetinná místa a v této podobě se
+použijí v následujícím kroku.
+Fázové posuvy před kompenzací a po kompenzaci:
+
+φ=arccos(cos φ) φ=arccos(0,31)
+φ=71,941°
+φ ′ =arccos(cos φ ′)φ ′=arccos(0,95)
+φ ′ =18,195 °
+Potřebný jalový výkon kompenzačního kondenzátoru:
+
+Q C =P [tan φ − tan φ′ ] QC =30(tan 71,941° − tan 18,195 °)
+QC =82,147 var
+Proud kompenzačního kondenzátoru:
+       QC      82,147
+I C=      IC =
+       U        230
+I C =0,357 A
+Kapacitní reaktance kondenzátoru:
+       U      230
+XC =      X =
+       I C C 0,357
+X C =644,258 Ω
+Kapacita kompenzačního kondenzátoru:
+
+ω=2 · π· f ω=2 · π·50
+ω=314,159 rad·s ⁻¹
+      1               1
+XC=        →C K =
+    ω ·C K         ω · XC
+            1
+CK=
+    314,159 · 644,258
+C K =4,941 ·10 ⁻ ⁶ F=4,941 µF
+     Jde o teoreticky vypočtenou hodnotu. Praktická normalizovaná kapacita se nevybírá,
+protože ji zadání nepožaduje.
+Napěťové dimenzování kondenzátoru:
+
+U m =√ 2· U U m=√ 2 ·230
+U m =325,269V ≈ 325 V
+    Hodnota 325,269 V je amplituda napájecího napětí, nikoli AC jmenovitá hodnota uvedená
+na kondenzátoru. Kondenzátor musí být výrobcem určen pro trvalý provoz alespoň při 230 V
+AC / 50 Hz, bezpečně snášet vypočtenou amplitudu a provozní přepětí. Vhodný je fóliový
+kompenzační kondenzátor, nikoli běžný polarizovaný elektrolytický kondenzátor.
+Proudy před kompenzací a po kompenzaci:
+         P           30
+I=             I=
+     U · cos φ    230· 0,31
+I =0,421 A
+         P              30
+I ′=            I ′=
+     U ·cos φ ′      230 · 0,95
+I ′=0,137 A
+Komplexní kontrola proudů:
+
+Q=P · tan φ Q=30· tan71,941 °
+Q=92,008 var
+Q ′=Q− QC Q ′=92,008 −82,147
+Q ′=9,861 var
+   P    Q
+I= − j
+   U    U
+I =0,130 − j0,400 A
+      Q
+I C= j C
+      U
+I C = j0,357 A
+
+Ī ′=I +I C
+
+Ī ′=( 0,130− j 0,400)+ j 0,357
+Ī ′=0,130 − j0,043 A
+    Velikosti komplexních proudů po zaokrouhlení potvrzují I = 0,421 A a I′ = 0,137 A.
+Drobná odchylka úhlu určeného pouze ze zobrazených složek je důsledkem průběžného
+zaokrouhlení.
+FÁZOROVÝ DIAGRAM:
+   Napájecí napětí je referenčním fázorem. Proud I zaostává o 71,941°, proud kondenzátoru
+Iᴄ předbíhá o 90° a proud po kompenzaci I′ zaostává o 18,195°. Geometrie diagramu je
+vytvořena z nezaokrouhlených hodnot; zobrazené popisky jsou zaokrouhleny na tři desetinná
+místa.
+
+
+
+
+ZHODNOCENÍ:
+   Pro zářivkové svítidlo s činným výkonem 30 W a původním účiníkem 0,31 byla vypočtena
+teoretická kapacita paralelního kompenzačního kondenzátoru Cₖ = 4,941 µF.
+     Amplituda napájecího napětí je 325,269 V. Tato hodnota není AC jmenovitý údaj
+kondenzátoru; součástka musí být výrobcem určena pro trvalý provoz alespoň při 230 V AC /
+50 Hz, bezpečně snášet uvedenou amplitudu a mít vhodnou napěťovou rezervu.
+     Proud svítidla bez kompenzace je 0,421 A. Po zvýšení účiníku na 0,95 klesne proud
+odebíraný ze sítě na 0,137 A. Činný výkon zůstává 30 W; kondenzátor zmenšuje induktivní
+jalovou složku proudu, a tím proudové zatížení vedení a související ztráty.
+     Komplexní kontrola potvrdila, že kapacitní proud j0,357 A zmenší imaginární složku
+původního proudu z −j0,400 A na −j0,043 A. Výsledky popisují idealizovaný teoretický
+model a nebyly experimentálně ověřeny. Nezahrnují nelinearity trubice, parazitní vlastnosti
+tlumivky, tolerance kondenzátoru ani změny napájecího napětí.
+

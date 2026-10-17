@@ -1,0 +1,6 @@
+https://tryhackme.com/certification/exam/db067253-cc4e-42db-ad23-4ab0ccfe09b9/pt1/dashboard
+
+https://www.scribd.com/document/906713714/AD-report-1
+https://www.scribd.com/document/894336550/TryHackMe-PT1-Exam-3
+
+https://github.com/ailtonbsj/tryhackme-cheatsheets/blob/main/NMAP.md

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1050" viewBox="0 0 1800 1050">
+<defs><marker id="arr-blue" markerWidth="14" markerHeight="14" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#1f4fff"/></marker><marker id="arr-red" markerWidth="14" markerHeight="14" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#d7191c"/></marker></defs>
+<rect width="1800" height="1050" fill="white"/>
+<line x1="180" y1="505.0" x2="1610" y2="505.0" stroke="#555" stroke-width="3"/>
+<line x1="520.0" y1="95" x2="520.0" y2="965" stroke="#555" stroke-width="3"/>
+<line x1="520.0" y1="505.0" x2="1210.00" y2="505.00" stroke="#1f4fff" stroke-width="8" marker-end="url(#arr-blue)"/>
+<line x1="520.0" y1="505.0" x2="637.39" y2="865.03" stroke="#d7191c" stroke-width="8" marker-end="url(#arr-red)"/>
+<line x1="520.0" y1="505.0" x2="520.00" y2="183.56" stroke="#d7191c" stroke-width="8" marker-end="url(#arr-red)"/>
+<line x1="520.0" y1="505.0" x2="637.39" y2="543.58" stroke="#d7191c" stroke-width="8" marker-end="url(#arr-red)"/>
+<line x1="637.39" y1="865.03" x2="637.39" y2="543.58" stroke="#666" stroke-width="3" stroke-dasharray="15 15"/>
+<text x="1170.00" y="575.00" font-family="Times New Roman,serif" font-size="40" fill="#1f4fff">U = 230,000 V</text>
+<text x="662.39" y="865.03" font-family="Times New Roman,serif" font-size="40" fill="#b00000">I = 0,421 A</text>
+<text x="545.00" y="183.56" font-family="Times New Roman,serif" font-size="40" fill="#b00000">Iᴄ = 0,357 A</text>
+<text x="667.39" y="523.58" font-family="Times New Roman,serif" font-size="40" fill="#b00000">I′ = 0,137 A</text>
+<text x="1080" y="120" font-family="Times New Roman,serif" font-size="36">1 mm ≙ 6 V</text>
+<text x="1080" y="175" font-family="Times New Roman,serif" font-size="36">1 mm ≙ 0,02 A</text>
+</svg>

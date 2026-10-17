@@ -1,0 +1,120 @@
+                                    Jméno: Vojtěch Solanský      Podpis:
+        GYMNÁZIUM
+  a STŘEDNÍ PRŮMYSLOVÁ
+ ŠKOLA ELEKTROTECHNIKY
+      A INFORMATIKY
+       FRENŠTÁT p. R.
+Název měření:
+                SEMESTRÁLNÍ PROJEKT ZELE 4Z                      Třída: T4A    Skupina: 3
+                                                                        Číslo měření: 4Z
+
+Zkoušené předměty:
+                    Sériové spojení dvou reálných cívek          Změřeno dne: 9. 9. 2025
+
+                                                                 Vyučující: Vladimír Kokeš
+Funkce při měření: Zapojující, Měřič        Spoluměřící: -
+
+Schéma:
+
+
+
+
+U =35V                              L1=36 mH                  R1=32 Ω
+L2=41mH                             R2=24 Ω                   P=2,1 W
+
+
+
+                                                                Známka:
+Poznámky učitele:
+
+
+
+                                                                Datum:
+ZADÁNÍ:
+   Dvě reálné cívky jsou spojeny do série a připojeny ke zdroji střídavého napětí o konstantní
+efektivní hodnotě a proměnné frekvenci. Mezi cívkami není žádná vzájemná magnetická
+vazba.
+    Vypočítejte frekvenci, při které je celkový činný výkon obvodu roven zadané hodnotě.
+Dále určete proud obvodem a fázový posuv mezi napájecím napětím a proudem.
+
+Zadané hodnoty:
+U =35V    L1=36 mH             R1=32 Ω
+L2=41mH     R2=24 Ω            P=2,1 W
+
+NÁHRADNÍ SCHÉMA:
+    Protože jsou obě reálné cívky zapojeny sériově a není mezi nimi vzájemná magnetická
+vazba, nahradí se jedním sériovým obvodem s celkovým odporem R = R₁ + R₂ a celkovou
+indukčností L = L₁ + L₂.
+VÝPOČTY:
+
+   Všechny zobrazené mezivýsledky se zaokrouhlují na tři desetinná místa a v této podobě se
+použijí v následujícím kroku.
+Celkový činný odpor obvodu:
+
+R=R 1+ R 2 R=32+ 24
+R=56,000 Ω
+Celková indukčnost obvodu:
+
+L=L1 + L2 L=36+ 41
+L=77,000 mH =0,077 H
+Proud obvodem z činného výkonu:
+
+P=I 2 · R → I =
+                   √   P
+                       R
+I=
+     √
+    2,1
+   56,000
+I =0,194 A
+Napětí na odporové části obvodu:
+
+U R=R · I U R=56,000 · 0,194
+U R=10,864 V
+Napětí na induktivní části obvodu:
+
+U L =√ U −U R U L =√ 35 −10,864
+            2      2            2     2
+
+
+U L =33,271V
+Celková induktivní reaktance:
+         UL      33,271
+X L=        X L=
+         I        0,194
+X L =171,500 Ω
+Frekvence napájecího napětí:
+                             XL
+X L =2· π· f · L → f =
+                           2· π· L
+      171,500
+f=
+     2· π·0,077
+f =354,481 Hz
+Fázový posuv mezi napětím a proudem:
+                UL             33,271
+φ=arctan (         )φ=arctan (        )
+                UR             10,864
+φ=71,917 °
+   Fázový posuv je kladný, protože obvod má induktivní charakter. Napájecí napětí předbíhá
+proud, respektive proud se za napětím zpožďuje o 71,917°.
+FÁZOROVÝ DIAGRAM:
+
+
+
+
+ZÁVISLOST ČINNÉHO VÝKONU NA FREKVENCI:
+ZHODNOCENÍ:
+    Pro sériové spojení dvou reálných cívek byla stanovena výsledná frekvence f = 354,481
+Hz, při které je podle použitého modelu celkový činný výkon 2,1 W. Proud obvodem je I =
+0,194 A.
+   Celkový fázový posuv je φ = 71,917°. Obvod má odporově-induktivní charakter, a proto se
+proud za napájecím napětím zpožďuje. Výpočet předpokládá lineární parametry cívek a
+nulovou vzájemnou magnetickou vazbu.
+   V důsledku schváleného průběžného zaokrouhlování dává kontrolní dosazení zobrazeného
+proudu zpětně P = I²R = 2,108 W. Rozdíl 0,008 W, tedy přibližně 0,363 %, je způsoben
+výhradně použitím mezivýsledků zaokrouhlených na tři desetinná místa.
+      Jde o výsledek teoretického výpočtu. Nebyl experimentálně ověřen a nezohledňuje
+frekvenční závislost odporů, parazitní kapacity, ztráty v magnetických obvodech ani tolerance
+parametrů cívek.
+

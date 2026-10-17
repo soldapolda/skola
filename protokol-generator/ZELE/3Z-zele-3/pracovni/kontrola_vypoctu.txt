@@ -1,0 +1,21 @@
+Kontrola výpočtu ZELE 3Z
+
+Přesné hodnoty:
+nS = 3000.000000000000 min⁻¹
+eta_n = 90.841825571794 %
+I_z = 117.000000000000 A
+Mn = 23.298859849440 N·m
+M_z z průběžně zaokrouhleného M_n = 48.927900000000 N·m
+nX = 2975.500000000000 min⁻¹
+
+Zobrazené hodnoty při průběžném zaokrouhlování:
+nS = 3000,000 min⁻¹
+nX = 2975,500 min⁻¹
+Mn = 23,299 N·m
+I_z = 117,000 A
+M_z = 48,928 N·m
+eta_n = 90,842 %
+
+Použitý vzor:
+Příklad 24 – hlavní postup.
+Příklad 25 – lineární pracovní oblast pro nX.

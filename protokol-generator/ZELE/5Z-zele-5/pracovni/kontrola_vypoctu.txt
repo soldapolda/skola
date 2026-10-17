@@ -1,0 +1,37 @@
+Kontrola výpočtu ZELE 5Z – průběžné zaokrouhlování na 3 desetinná místa
+
+Zadané hodnoty:
+U = 230 V
+f = 50 Hz
+P = 30 W
+cos(φ) = 0,31
+cos(φ′) = 0,95
+
+φ = 71,941°
+φ′ = 18,195°
+QC = 82,147 var
+IC = 0,357 A
+XC = 644,258 Ω
+ω = 314,159 rad·s⁻¹
+CK = 4,941 µF
+Um = 325,269 V ≈ 325 V (amplituda napájecího napětí)
+UnC ≥ 230 V AC / 50 Hz (jmenovitá efektivní hodnota pro trvalý střídavý provoz)
+I = 0,421 A
+I′ = 0,137 A
+
+Komplexní kontrola:
+Q = 92,008 var
+Q′ = 9,861 var
+Ī = 0,130 − j0,400 A
+ĪC = j0,357 A
+Ī′ = 0,130 − j0,043 A
+|Ī| = 0,421 A po zaokrouhlení
+|Ī′| = 0,137 A po zaokrouhlení
+
+Měřítka fázorového diagramu:
+U: 1 mm ≙ 6 V
+proudy: 1 mm ≙ 0,02 A
+U ≈ 38,333 mm
+I ≈ 21,050 mm
+IC ≈ 17,850 mm
+I′ ≈ 6,850 mm
